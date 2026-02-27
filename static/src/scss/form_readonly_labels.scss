@@ -1,0 +1,9 @@
+/* Make readonly field labels look like normal labels (avoid dimmed appearance) */
+.o_form_view .o_form_label[for] {
+  opacity: 1 !important;
+}
+/* Also ensure readonly fields don't dim too much */
+.o_form_view .o_readonly_modifier .o_input, 
+.o_form_view .o_readonly_modifier .o_field_widget {
+  opacity: 1 !important;
+}

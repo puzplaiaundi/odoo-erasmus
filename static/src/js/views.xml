@@ -1,0 +1,172 @@
+<odoo>
+  <data>
+    <!-- Security groups already use base.group_system for menu restriction -->
+
+    <!-- Kanban View -->
+    <record id="view_erasmus_persona_kanban" model="ir.ui.view">
+      <field name="name">erasmus.persona.kanban</field>
+      <field name="model">erasmus.persona</field>
+      <field name="arch" type="xml">
+        <kanban default_group_by="tipo_interno" class="o_kanban_small_column">
+          <field name="image_1920"/>
+          <field name="nombre_completo"/>
+          <field name="tipo_interno"/>
+          <field name="centro_formacion"/>
+          <field name="email"/>
+          <templates>
+            <t t-name="kanban-box">
+              <div class="oe_kanban_global_click">
+                <div class="o_kanban_image">
+                  <img t-if="record.image_1920.raw_value" t-att-src="image_data_uri(record.image_1920.raw_value)" class="o_kanban_avatar"/>
+                  <div t-else="" class="o_kanban_avatar o_kanban_no_image">👤</div>
+                </div>
+                <div class="oe_kanban_details">
+                  <strong t-esc="record.nombre_completo.value"/>
+                  <div>
+                    <span t-esc="record.tipo_interno.value" class="badge"/>
+                  </div>
+                  <div t-if="record.centro_formacion.raw_value" class="o_text_muted" t-esc="record.centro_formacion.value"/>
+                  <div t-if="record.email.raw_value" t-esc="record.email.value"/>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_erasmus_persona_tree" model="ir.ui.view">
+      <field name="name">erasmus.persona.tree</field>
+      <field name="model">erasmus.persona</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="nombre"/>
+          <field name="apellido1"/>
+            <field name="apellido2"/>
+          <field name="tipo_interno"/>
+          <field name="centro_formacion"/>
+          <field name="familia_profesional"/>
+          <field name="email"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_erasmus_persona_search" model="ir.ui.view">
+      <field name="name">erasmus.persona.search</field>
+      <field name="model">erasmus.persona</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="nombre"/>
+          <field name="apellido1"/>
+          <field name="apellido2"/>
+          <field name="tipo_interno"/>
+          <field name="centro_formacion"/>
+        </search>
+      </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_erasmus_persona_form" model="ir.ui.view">
+      <field name="name">erasmus.persona.form</field>
+      <field name="model">erasmus.persona</field>
+      <field name="arch" type="xml">
+        <form string="Persona Erasmus">
+          <sheet>
+            <div class="oe_button_box" name="button_box"/>
+            <group>
+              <group>
+                <field name="tipo_interno"/>
+                <field name="nombre"/>
+                <field name="apellido1"/>
+                <field name="apellido2"/>
+                <field name="nif"/>
+                <field name="email"/>
+                <field name="movil"/>
+                <field name="centro_formacion"/>
+              </group>
+              <group>
+                <field name="image_1920" widget="image" class="oe_avatar"/>
+                <field name="fecha_nacimiento"/>
+                <field name="genero"/>
+                <field name="nacionalidad"/>
+              </group>
+            </group>
+            <notebook>
+              <page string="Dirección">
+                <group>
+                  <group>
+                    <field name="street"  widget="direccion_autocomplete" placeholder="Escribe una dirección"/>
+                    <field name="street2"/>
+                    <field name="city"/>
+                  </group>
+                  <group>
+                    <field name="zip"/>
+                    <field name="state_id"/>
+                    <field name="country_id"/>
+                    <field name="portal"/>
+                    <field name="puerta"/>
+                  </group>
+                </group>
+              </page>
+              <page string="Datos Académicos">
+                <group>
+                  <group>
+                    <field name="nivel_imparticion"/>
+                    <field name="requiere_explicacion"/>
+                    <field name="familia_profesional"/>
+                    <field name="ciclo_formativo"/>
+                    <field name="programa"/>
+                    <field name="codigo_erasmus"/>
+                    <field name="codigo_iscedf"/>
+                    <field name="antiguedad_educacion"/>
+                  </group>
+                  <group string="Idiomas">
+                    <field name="nivel_ingles"/>
+                    <field name="nivel_frances"/>
+                    <field name="nivel_aleman"/>
+                  </group>
+                </group>
+                <group string="Profesor Coordinador">
+                  <group>
+                    <field name="profesor_coordinador_nombre"/>
+                    <field name="profesor_coordinador_apellidos"/>
+                  </group>
+                  <group>
+                    <field name="profesor_coordinador_email"/>
+                    <field name="profesor_coordinador_telefono"/>
+                  </group>
+                </group>
+              </page>
+              <page string="Otros">
+                <group>
+                  <field name="nombre_completo" readonly="1"/>
+                </group>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_erasmus_persona" model="ir.actions.act_window">
+      <field name="name">Estudiantes y Profesores</field>
+      <field name="res_model">erasmus.persona</field>
+      <field name="view_mode">kanban,tree,form</field>
+      <field name="view_id" ref="view_erasmus_persona_kanban"/>
+      <field name="search_view_id" ref="view_erasmus_persona_search"/>
+      <field name="context">{}</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">Crea la primera persona Erasmus</p>
+        <p>Desde aquí gestiona estudiantes, profesores y acompañantes en un único listado.</p>
+      </field>
+    </record>
+
+    <!-- Menú principal (solo Administrador) -->
+    <menuitem id="menu_gestion_erasmus_root" name="Gestión Erasmus" groups="base.group_system" sequence="10"/>
+    <menuitem id="menu_gestion_erasmus_personas" name="Estudiantes y Profesores" parent="menu_gestion_erasmus_root" action="action_erasmus_persona" sequence="10"/>
+    <!-- Referencias postales eliminadas: se usa autocompletado dinámico con Nominatim -->
+  </data>
+</odoo>

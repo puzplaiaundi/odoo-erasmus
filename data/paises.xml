@@ -1,0 +1,119 @@
+<odoo>
+  <data noupdate="1">
+    <!-- Seed países según tabla proporcionada -->
+    <record id="erasmus_pais_italia" model="erasmus.pais">
+      <field name="name_eu">Italia</field>
+      <field name="name_es">Italia</field>
+      <field name="country_id" ref="base.it"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_portugal" model="erasmus.pais">
+      <field name="name_eu">Portugal</field>
+      <field name="name_es">Portugal</field>
+      <field name="country_id" ref="base.pt"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_croacia" model="erasmus.pais">
+      <field name="name_eu">Kroazia</field>
+      <field name="name_es">Croacia</field>
+      <field name="country_id" ref="base.hr"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_polonia" model="erasmus.pais">
+      <field name="name_eu">Polonia</field>
+      <field name="name_es">Polonia</field>
+      <field name="country_id" ref="base.pl"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_dinamarca" model="erasmus.pais">
+      <field name="name_eu">Danimarka</field>
+      <field name="name_es">Dinamarca</field>
+      <field name="country_id" ref="base.dk"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_chequia" model="erasmus.pais">
+      <field name="name_eu">Txekiar Errepublika</field>
+      <field name="name_es">República Checa</field>
+      <field name="country_id" ref="base.cz"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_eslovenia" model="erasmus.pais">
+      <field name="name_eu">Eslovenia</field>
+      <field name="name_es">Eslovenia</field>
+      <field name="country_id" ref="base.si"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_austria" model="erasmus.pais">
+      <field name="name_eu">Austria</field>
+      <field name="name_es">Austria</field>
+      <field name="country_id" ref="base.at"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_bulgaria" model="erasmus.pais">
+      <field name="name_eu">Bulgaria</field>
+      <field name="name_es">Bulgaria</field>
+      <field name="country_id" ref="base.bg"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_estonia" model="erasmus.pais">
+      <field name="name_eu">Estonia</field>
+      <field name="name_es">Estonia</field>
+      <field name="country_id" ref="base.ee"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_grecia" model="erasmus.pais">
+      <field name="name_eu">Grezia</field>
+      <field name="name_es">Grecia</field>
+      <field name="country_id" ref="base.gr"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_hungria" model="erasmus.pais">
+      <field name="name_eu">Hungaria</field>
+      <field name="name_es">Hungría</field>
+      <field name="country_id" ref="base.hu"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_irlanda_familia" model="erasmus.pais">
+      <field name="name_eu">Irlanda (familietan)</field>
+      <field name="name_es">Irlanda (en familia)</field>
+      <field name="country_id" ref="base.ie"/>
+      <field name="selection_scope">estudiante</field>
+    </record>
+    <record id="erasmus_pais_suecia" model="erasmus.pais">
+      <field name="name_eu">Sueda</field>
+      <field name="name_es">Suecia</field>
+      <field name="country_id" ref="base.se"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_malta" model="erasmus.pais">
+      <field name="name_eu">Malta</field>
+      <field name="name_es">Malta</field>
+      <field name="country_id" ref="base.mt"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_lituania" model="erasmus.pais">
+      <field name="name_eu">Lituania</field>
+      <field name="name_es">Lituania</field>
+      <field name="country_id" ref="base.lt"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_finlandia" model="erasmus.pais">
+      <field name="name_eu">Finlandia</field>
+      <field name="name_es">Finlandia</field>
+      <field name="country_id" ref="base.fi"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_serbia" model="erasmus.pais">
+      <field name="name_eu">Serbia</field>
+      <field name="name_es">Serbia</field>
+      <field name="country_id" ref="base.rs"/>
+      <field name="selection_scope">ambos</field>
+    </record>
+    <record id="erasmus_pais_francia_burdeos" model="erasmus.pais">
+      <field name="name_eu">Frantzia (Bordele familien)</field>
+      <field name="name_es">Francia (Burdeos en familia)</field>
+      <field name="country_id" ref="base.fr"/>
+      <field name="selection_scope">estudiante</field>
+    </record>
+  </data>
+</odoo>

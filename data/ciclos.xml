@@ -1,0 +1,111 @@
+<odoo>
+  <data noupdate="0">
+    <!-- Informática y Comunicaciones -->
+    <record id="ciclo_smr" model="erasmus.ciclo">
+      <field name="name">MIKROINFORMATIKA SISTEMAK ETA SAREAK - SISTEMAS MICROINFORMÁTICOS Y REDES - MICROCOMPUTER SYSTEMS AND NETWORKS</field>
+      <field name="code">smr</field>
+      <field name="familia_profesional">informatica</field>
+      <field name="nivel">cfgm</field>
+    </record>
+    <record id="ciclo_asir" model="erasmus.ciclo">
+      <field name="name">SARE-INFORMATIKA SISTEMEN ADMINISTRAZIOA - ADMINISTRACIÓN DE SISTEMAS INFORMÁTICOS EN RED - COMPUTER NETWORK SYSTEMS MANAGEMENT</field>
+      <field name="code">asir</field>
+      <field name="familia_profesional">informatica</field>
+      <field name="nivel">cfgs</field>
+    </record>
+    <record id="ciclo_dam" model="erasmus.ciclo">
+      <field name="name">PLATAFORMA ANITZEKO APLIKAZIOEN GARAPENA - DESARROLLO DE APLICACIONES MULTIPLATAFORMA - MULTI-PLATFORM APPLICATIONS DEVELOPMENT</field>
+      <field name="code">dam</field>
+      <field name="familia_profesional">informatica</field>
+      <field name="nivel">cfgs</field>
+    </record>
+    <record id="ciclo_daw" model="erasmus.ciclo">
+      <field name="name">WEB APLIKAZIOEN GARAPENA - DESARROLLO DE APLICACIONES WEB - DEVELOPMENT OF WEB APPLICATIONS</field>
+      <field name="code">daw</field>
+      <field name="familia_profesional">informatica</field>
+      <field name="nivel">cfgs</field>
+    </record>
+
+    <!-- Administración y Gestión -->
+    <record id="ciclo_gestion_admin" model="erasmus.ciclo">
+      <field name="name">ADMINISTRAZIO KUDEAKETA - GESTIÓN ADMINISTRATIVA - ADMINISTRATIVE MANAGEMENT</field>
+      <field name="code">gestion_admin</field>
+      <field name="familia_profesional">administracion</field>
+      <field name="nivel">cfgm</field>
+    </record>
+    <record id="ciclo_admin_finanzas" model="erasmus.ciclo">
+      <field name="name">ADMINISTRAZIOA ETA FINANTZAK - ADMINISTRACIÓN Y FINANZAS - ADMINISTRATION AND FINANCE</field>
+      <field name="code">admin_finanzas</field>
+      <field name="familia_profesional">administracion</field>
+      <field name="nivel">cfgs</field>
+    </record>
+
+    <!-- Comercio y Marketing / Transporte y Logística -->
+    <record id="ciclo_conduccion_transportes" model="erasmus.ciclo">
+      <field name="name">ERREPIDE GARRAIOARAKO IBILGAILUAK GIDATZEA - CONDUCCIÓN DE VEHÍCULOS DE TRANSPORTE POR CARRETERA - DRIVING ROAD TRANSPORT VEHICLES</field>
+      <field name="code">conduccion_transportes</field>
+      <field name="familia_profesional">transporte</field>
+      <field name="nivel">cfgm</field>
+    </record>
+    <record id="ciclo_comercio_internacional" model="erasmus.ciclo">
+      <field name="name">NAZIOARTEKO MERKATARITZA - COMERCIO INTERNACIONAL - INTERNATIONAL TRADE</field>
+      <field name="code">comercio_internacional</field>
+      <field name="familia_profesional">comercio</field>
+      <field name="nivel">cfgs</field>
+    </record>
+    <record id="ciclo_transporte_logistica" model="erasmus.ciclo">
+      <field name="name">GARRAIOA ETA LOGISTIKA - TRANSPORTE Y LOGÍSTICA - TRANSPORTS AND LOGISTICS</field>
+      <field name="code">transporte_logistica</field>
+      <field name="familia_profesional">comercio</field>
+      <field name="nivel">cfgs</field>
+    </record>
+
+    <!-- Sanidad -->
+    <record id="ciclo_aux_enfermeria" model="erasmus.ciclo">
+      <field name="name">ERIZAINTZAREN LAGUNTZA OSAGARRIAK - CUIDADOS AUXILIARES DE ENFERMERÍA - AUXILIARY NURSERY CARE</field>
+      <field name="code">aux_enfermeria</field>
+      <field name="familia_profesional">sanidad</field>
+      <field name="nivel">cfgm</field>
+    </record>
+    <record id="ciclo_farmacia" model="erasmus.ciclo">
+      <field name="name">FARMAZIA ETA PARAFARMAZIA - FARMACIA Y PARAFARMACIA - PHARMACY AND PARAPHARMACY</field>
+      <field name="code">farmacia</field>
+      <field name="familia_profesional">sanidad</field>
+      <field name="nivel">cfgm</field>
+    </record>
+    <record id="ciclo_dependencia" model="erasmus.ciclo">
+      <field name="name">MENDEKOTASUN-EGOERAN DAUDEN PERTSONENTZAKO ARRETA - ATENCIÓN A PERSONAS EN SITUACIÓN DE DEPENDENCIA - ASSISTANCE TO PEOPLE IN NEED OF CARE</field>
+      <field name="code">dependencia</field>
+      <field name="familia_profesional">servicios</field>
+      <field name="nivel">cfgm</field>
+    </record>
+    <record id="ciclo_laboratorio" model="erasmus.ciclo">
+      <field name="name">LABORATEGI KLINIKO ETA BIOMEDIKOA - LABORATORIO CLÍNICO Y BIOMÉDICO - CLINICAL AND BIOMEDICAL LABORATORY</field>
+      <field name="code">laboratorio</field>
+      <field name="familia_profesional">sanidad</field>
+      <field name="nivel">cfgs</field>
+    </record>
+    <record id="ciclo_dietetica" model="erasmus.ciclo">
+      <field name="name">DIETETIKA - DIETÉTICA - DIETETICS</field>
+      <field name="code">dietetica</field>
+      <field name="familia_profesional">sanidad</field>
+      <field name="nivel">cfgs</field>
+    </record>
+
+    <!-- Servicios Socioculturales y a la Comunidad -->
+    <record id="ciclo_integracion" model="erasmus.ciclo">
+      <field name="name">GIZARTERATZEA - INTEGRACIÓN SOCIAL - SOCIAL INTEGRATION</field>
+      <field name="code">integracion</field>
+      <field name="familia_profesional">servicios</field>
+      <field name="nivel">cfgs</field>
+    </record>
+    <record id="ciclo_educacion_infantil" model="erasmus.ciclo">
+      <field name="name">HAUR HEZKUNTZA - EDUCACIÓN INFANTIL - PRE-PRIMARY EDUCATION</field>
+      <field name="code">educacion_infantil</field>
+      <field name="familia_profesional">servicios</field>
+      <field name="nivel">cfgs</field>
+    </record>
+
+    <!-- Se elimina registro 'otros' por no existir esa familia en el catálogo -->
+  </data>
+</odoo>

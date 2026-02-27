@@ -1,0 +1,282 @@
+<odoo>
+    <data>
+        <!-- Añadir acceso en el dashboard del portal -->
+        <template id="portal_my_home_erasmus" inherit_id="portal.portal_my_home">
+          <xpath expr="//div[hasclass('o_portal_my_home')]" position="inside">
+            <div class="row g-3 mt-2">
+              <div class="col-12 col-md-6 col-lg-4">
+                <a href="/my/erasmus" class="card h-100" style="text-decoration:none;">
+                  <div class="card-body">
+                    <h5 class="card-title">Mi Erasmus</h5>
+                    <p class="card-text text-muted">Revisa tus datos y sube la documentación requerida.</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </xpath>
+        </template>
+<!--
+        <template id="listing">
+          <ul>
+            <li t-foreach="objects" t-as="object">
+              <a t-attf-href="#{ root }/objects/#{ object.id }">
+                <t t-esc="object.display_name"/>
+              </a>
+            </li>
+          </ul>
+        </template>
+        <template id="object">
+          <h1><t t-esc="object.display_name"/></h1>
+          <dl>
+            <t t-foreach="object._fields" t-as="field">
+              <dt><t t-esc="field"/></dt>
+              <dd><t t-esc="object[field]"/></dd>
+            </t>
+          </dl>
+        </template>
+-->
+        <!-- Portal: página vacía cuando no hay persona vinculada -->
+        <template id="portal_student_empty" name="Portal Erasmus - Empty">
+          <t t-call="portal.portal_layout">
+            <t t-set="title">Portal Erasmus</t>
+            <section class="o_container" style="padding: 32px 0;">
+              <div class="container">
+                <h2>Portal Erasmus</h2>
+                <p>No se ha encontrado tu ficha de persona vinculada. Contacta con la administración.</p>
+              </div>
+            </section>
+          </t>
+        </template>
+
+        <!-- Portal: Home estudiante con datos y subida de documentos -->
+        <template id="portal_student_home" name="Portal Erasmus - Home">
+          <t t-call="portal.portal_layout">
+            <t t-set="title">Mi Erasmus</t>
+            <!-- Cabecera personalizada -->
+            <section class="ge-portal-header">
+              <div class="ge-container">
+                <img t-att-src="'/web/image/res.company/%s/logo' % request.env.company.id" alt="Erasmus" style="height:36px;object-fit:contain;"/>
+                <h1 style="margin:0;font-size:20px;">Mi Erasmus</h1>
+              </div>
+            </section>
+            <section class="o_container ge-main">
+              <div class="ge-container">
+                <t t-if="flash">
+                  <div class="ge-alert ge-alert-success"><t t-esc="flash"/></div>
+                </t>
+                <!-- Resumen y progreso -->
+                <div class="ge-card" style="margin-bottom:16px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <t t-set="progress" t-value="min(100, max(0, int(persona.progreso_documentacion or 0)))"/>
+                    <strong>Progreso</strong>
+                    <span><t t-esc="progress"/>%</span>
+                  </div>
+                  <div class="ge-progress">
+                    <div class="ge-progress-bar" t-att-style="'width:' + (str(progress) if progress is not None else '0') + '%' "></div>
+                  </div>
+                  <!-- Checklist básico -->
+                  <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:12px;font-size:13px;">
+                    <t t-set="okIcon">✔</t>
+                    <t t-set="koIcon">✖</t>
+                    <div>
+                      <t t-if="persona.movil"><span style="color:#059669;"><t t-esc="okIcon"/> Móvil</span></t>
+                      <t t-else=""><span style="color:#dc2626;"><t t-esc="koIcon"/> Móvil</span></t>
+                    </div>
+                    <div>
+                      <t t-if="persona.street"><span style="color:#059669;"><t t-esc="okIcon"/> Calle</span></t>
+                      <t t-else=""><span style="color:#dc2626;"><t t-esc="koIcon"/> Calle</span></t>
+                    </div>
+                    <div>
+                      <t t-if="persona.city"><span style="color:#059669;"><t t-esc="okIcon"/> Ciudad</span></t>
+                      <t t-else=""><span style="color:#dc2626;"><t t-esc="koIcon"/> Ciudad</span></t>
+                    </div>
+                    <div>
+                      <t t-if="persona.zip"><span style="color:#059669;"><t t-esc="okIcon"/> CP</span></t>
+                      <t t-else=""><span style="color:#dc2626;"><t t-esc="koIcon"/> CP</span></t>
+                    </div>
+                    <t t-if="movilidad">
+                      <div>
+                        <t t-if="movilidad.dni"><span style="color:#059669;"><t t-esc="okIcon"/> DNI</span></t>
+                        <t t-else=""><span style="color:#dc2626;"><t t-esc="koIcon"/> DNI</span></t>
+                      </div>
+                      <div>
+                        <t t-if="movilidad.cert_titularidad_bancaria"><span style="color:#059669;"><t t-esc="okIcon"/> Titularidad</span></t>
+                        <t t-else=""><span style="color:#dc2626;"><t t-esc="koIcon"/> Titularidad</span></t>
+                      </div>
+                      <div>
+                        <t t-if="movilidad.curriculum_ingles"><span style="color:#059669;"><t t-esc="okIcon"/> CV EN</span></t>
+                        <t t-else=""><span style="color:#dc2626;"><t t-esc="koIcon"/> CV EN</span></t>
+                      </div>
+                      <div>
+                        <t t-if="movilidad.carta_presentacion_ingles"><span style="color:#059669;"><t t-esc="okIcon"/> Carta EN</span></t>
+                        <t t-else=""><span style="color:#dc2626;"><t t-esc="koIcon"/> Carta EN</span></t>
+                      </div>
+                    </t>
+                  </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+                  <t t-set="foto" t-value="persona.image_1920"/>
+                  <t t-if="foto">
+                    <img t-att-src="'/web/image/erasmus.persona/%s/image_1920' % persona.id" alt="Foto de perfil" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:1px solid #e5e7eb;"/>
+                  </t>
+                  <t t-else="">
+                    <div style="width:64px;height:64px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;">👤</div>
+                  </t>
+                  <div>
+                    <h2 style="margin:0;">Tu Portal Erasmus</h2>
+                    <div class="text-muted">Bienvenido/a, <t t-esc="persona.nombre_completo or ''"/></div>
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr; gap:16px;">
+                  <!-- Tarjeta datos personales / dirección -->
+                  <div class="ge-card">
+                    <h3 style="margin-top:0;font-size:18px;">Tus datos</h3>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                      <div>
+                        <label>Nombre</label>
+                        <div><t t-esc="persona.nombre_completo"/></div>
+                      </div>
+                      <div>
+                        <label>Email</label>
+                        <div><t t-esc="persona.email or '-'"/></div>
+                      </div>
+                      <div>
+                        <label>Móvil</label>
+                        <div>
+                          <form action="/my/erasmus/save" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input name="movil" t-att-value="persona.movil or ''" style="width:220px;padding:6px;border:1px solid #d1d5db;border-radius:6px;"/>
+                            <button type="submit" class="ge-btn ge-btn-primary" style="margin-left:6px;">Guardar</button>
+                          </form>
+                        </div>
+                      </div>
+                      <div>
+                        <label>NIF</label>
+                        <div><t t-esc="persona.nif or '-'"/></div>
+                      </div>
+                    </div>
+                    <hr/>
+                    <h4 style="margin:8px 0 6px 0;">Dirección</h4>
+                    <form action="/my/erasmus/save" method="post" enctype="multipart/form-data" style="display:grid;grid-template-columns:2fr 2fr 1fr 1fr;gap:8px;align-items:end;">
+                      <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                      <div>
+                        <label>Calle</label>
+                        <input name="street" t-att-value="persona.street or ''" style="width:100%;padding:6px;border:1px solid #d1d5db;border-radius:6px;"/>
+                      </div>
+                      <div>
+                        <label>Ciudad</label>
+                        <input name="city" t-att-value="persona.city or ''" style="width:100%;padding:6px;border:1px solid #d1d5db;border-radius:6px;"/>
+                      </div>
+                      <div>
+                        <label>CP</label>
+                        <input name="zip" t-att-value="persona.zip or ''" style="width:100%;padding:6px;border:1px solid #d1d5db;border-radius:6px;"/>
+                      </div>
+                      <div>
+                        <button type="submit" class="ge-btn ge-btn-primary">Guardar</button>
+                      </div>
+                    </form>
+                  </div>
+
+                  <!-- Tarjeta documentos -->
+                  <div class="ge-card">
+                    <h3 style="margin-top:0;font-size:18px;">Documentación</h3>
+                    <t t-if="movilidad">
+                      <p class="text-muted" style="margin-top:0;">Sube tus documentos requeridos. Formatos aceptados: PDF/JPG/PNG.</p>
+                    </t>
+                    <form action="/my/erasmus/save" method="post" enctype="multipart/form-data" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                      <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                      <div>
+                        <label>DNI (anverso/único)</label>
+                        <input type="file" name="dni"/>
+                      </div>
+                      <div>
+                        <label>DNI 2 (reverso)</label>
+                        <input type="file" name="dni2"/>
+                      </div>
+                      <div>
+                        <label>Cert. titularidad bancaria</label>
+                        <input type="file" name="cert_titularidad_bancaria"/>
+                      </div>
+                      <div>
+                        <label>Curriculum (inglés)</label>
+                        <input type="file" name="curriculum_ingles"/>
+                      </div>
+                      <div>
+                        <label>Carta presentación (inglés)</label>
+                        <input type="file" name="carta_presentacion_ingles"/>
+                      </div>
+                      <div>
+                        <label>Certificado 1</label>
+                        <input type="file" name="certificado_1"/>
+                      </div>
+                      <div>
+                        <label>Certificado 2</label>
+                        <input type="file" name="certificado_2"/>
+                      </div>
+                      <div>
+                        <label>Certificado 3</label>
+                        <input type="file" name="certificado_3"/>
+                      </div>
+                      <div style="grid-column: 1/-1;">
+                        <button type="submit" class="ge-btn ge-btn-primary">Subir documentos</button>
+                      </div>
+                    </form>
+
+                    <t t-if="movilidad">
+                      <div style="margin-top:10px;font-size:13px;color:#6b7280;">Estado datos: <t t-esc="dict(movilidad._fields['estado_datos'].selection).get(movilidad.estado_datos)"/></div>
+                      <!-- Listado de documentos subidos -->
+                      <div style="margin-top:12px;">
+                        <h4 style="font-size:16px;margin-bottom:8px;">Tus archivos</h4>
+                        <ul style="list-style:none;padding-left:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                          <t t-if="movilidad.dni">
+                            <li>
+                              <a t-att-href="'/web/content/%s?model=erasmus.movilidad&amp;field=dni&amp;download=true' % movilidad.id" style="color:#231F20;text-decoration:none;">🗎 DNI</a>
+                            </li>
+                          </t>
+                          <t t-if="movilidad.dni2">
+                            <li>
+                              <a t-att-href="'/web/content/%s?model=erasmus.movilidad&amp;field=dni2&amp;download=true' % movilidad.id" style="color:#231F20;text-decoration:none;">🗎 DNI 2</a>
+                            </li>
+                          </t>
+                          <t t-if="movilidad.cert_titularidad_bancaria">
+                            <li>
+                              <a t-att-href="'/web/content/%s?model=erasmus.movilidad&amp;field=cert_titularidad_bancaria&amp;download=true' % movilidad.id" style="color:#231F20;text-decoration:none;">🗎 Titularidad bancaria</a>
+                            </li>
+                          </t>
+                          <t t-if="movilidad.curriculum_ingles">
+                            <li>
+                              <a t-att-href="'/web/content/%s?model=erasmus.movilidad&amp;field=curriculum_ingles&amp;download=true' % movilidad.id" style="color:#231F20;text-decoration:none;">🗎 CV inglés</a>
+                            </li>
+                          </t>
+                          <t t-if="movilidad.carta_presentacion_ingles">
+                            <li>
+                              <a t-att-href="'/web/content/%s?model=erasmus.movilidad&amp;field=carta_presentacion_ingles&amp;download=true' % movilidad.id" style="color:#231F20;text-decoration:none;">🗎 Carta presentación</a>
+                            </li>
+                          </t>
+                          <t t-if="movilidad.certificado_1">
+                            <li>
+                              <a t-att-href="'/web/content/%s?model=erasmus.movilidad&amp;field=certificado_1&amp;download=true' % movilidad.id" style="color:#231F20;text-decoration:none;">🗎 Certificado 1</a>
+                            </li>
+                          </t>
+                          <t t-if="movilidad.certificado_2">
+                            <li>
+                              <a t-att-href="'/web/content/%s?model=erasmus.movilidad&amp;field=certificado_2&amp;download=true' % movilidad.id" style="color:#231F20;text-decoration:none;">🗎 Certificado 2</a>
+                            </li>
+                          </t>
+                          <t t-if="movilidad.certificado_3">
+                            <li>
+                              <a t-att-href="'/web/content/%s?model=erasmus.movilidad&amp;field=certificado_3&amp;download=true' % movilidad.id" style="color:#231F20;text-decoration:none;">🗎 Certificado 3</a>
+                            </li>
+                          </t>
+                        </ul>
+                      </div>
+                    </t>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </t>
+        </template>
+    </data>
+</odoo>

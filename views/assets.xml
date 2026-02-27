@@ -1,0 +1,14 @@
+<odoo>
+  <data>
+    <template id="assets_backend" inherit_id="web.assets_backend" name="gestion_erasmus backend assets">
+      <xpath expr="." position="inside">
+        <link rel="stylesheet" type="text/css" href="/gestion_erasmus/static/src/css/backend.css"/>
+      </xpath>
+    </template>
+    <template id="assets_frontend" inherit_id="web.assets_frontend" name="gestion_erasmus frontend assets">
+      <xpath expr="." position="inside">
+        <link rel="stylesheet" type="text/css" href="/gestion_erasmus/static/src/css/portal.css"/>
+      </xpath>
+    </template>
+  </data>
+</odoo>

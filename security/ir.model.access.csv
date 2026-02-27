@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_erasmus_persona_user,erasmus.persona.user,model_erasmus_persona,gestion_erasmus.group_erasmus_profesor,1,1,1,0
+access_erasmus_persona_manager,erasmus.persona.manager,model_erasmus_persona,gestion_erasmus.group_erasmus_admin,1,1,1,1
+access_erasmus_persona_internal_readonly,erasmus.persona.internal.readonly,model_erasmus_persona,base.group_user,1,0,0,0
+access_erasmus_persona_portal_readonly,erasmus.persona.portal.readonly,model_erasmus_persona,base.group_portal,1,0,0,0
+access_erasmus_ciclo_user,erasmus.ciclo.user,model_erasmus_ciclo,gestion_erasmus.group_erasmus_profesor,1,0,0,0
+access_erasmus_ciclo_manager,erasmus.ciclo.manager,model_erasmus_ciclo,gestion_erasmus.group_erasmus_admin,1,1,1,1
+erasmus_codigo_user,erasmus.codigo.user,model_erasmus_codigo,gestion_erasmus.group_erasmus_profesor,1,0,0,0
+erasmus_codigo_admin,erasmus.codigo.admin,model_erasmus_codigo,gestion_erasmus.group_erasmus_admin,1,1,1,1
+access_erasmus_movilidad_user,erasmus.movilidad.user,model_erasmus_movilidad,gestion_erasmus.group_erasmus_profesor,1,1,1,0
+access_erasmus_movilidad_manager,erasmus.movilidad.manager,model_erasmus_movilidad,gestion_erasmus.group_erasmus_admin,1,1,1,1
+access_erasmus_movilidad_portal_readonly,erasmus.movilidad.portal.readonly,model_erasmus_movilidad,base.group_portal,1,0,0,0
+access_erasmus_pais_user,erasmus.pais.user,model_erasmus_pais,gestion_erasmus.group_erasmus_admin,1,1,1,1

@@ -1,0 +1,75 @@
+/* gestion_erasmus portal styles */
+:root {
+  --ge-black: #231F20;
+  --ge-yellow: #FFC100;
+  --ge-bg: #FCFFFC;
+  --ge-border: #e5e7eb;
+  --ge-muted: #6b7280;
+  --ge-success: #059669;
+  --ge-danger: #dc2626;
+}
+
+.ge-portal-header {
+  background: var(--ge-black);
+  color: var(--ge-bg);
+}
+.ge-portal-header .ge-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+}
+
+.ge-container {
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ge-main {
+  background: var(--ge-bg);
+  padding: 24px 0;
+}
+
+.ge-card {
+  background: #fff;
+  border: 1px solid var(--ge-border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.ge-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.ge-btn-primary {
+  background: var(--ge-yellow);
+  color: var(--ge-black);
+}
+
+.ge-progress {
+  width: 100%;
+  height: 10px;
+  background: var(--ge-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.ge-progress-bar {
+  height: 10px;
+  background: var(--ge-yellow);
+  border-radius: 999px;
+}
+
+.ge-alert {
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.ge-alert-success {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: var(--ge-success);
+}

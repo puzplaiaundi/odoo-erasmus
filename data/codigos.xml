@@ -1,0 +1,129 @@
+<odoo>
+  <data noupdate="0">
+    <!-- Valores globales por defecto -->
+    <record id="codigo_programa_default" model="erasmus.codigo">
+      <field name="key">programa</field>
+      <field name="valor">ERASMUS+</field>
+      <field name="active">1</field>
+      <field name="note">Programa por defecto</field>
+    </record>
+    <record id="codigo_erasmus_default" model="erasmus.codigo">
+      <field name="key">codigo_erasmus</field>
+      <field name="valor">ER-DEFAULT</field>
+      <field name="active">1</field>
+      <field name="note">Código Erasmus por defecto</field>
+    </record>
+
+    <!-- Ejemplos por ciclo: ISCED-F específico por ciclo -->
+    <record id="codigo_iscedf_smr" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_smr"/>
+      <field name="valor">0612</field>
+      <field name="active">1</field>
+      <field name="note">SMR</field>
+    </record>
+    <record id="codigo_iscedf_asir" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_asir"/>
+      <field name="valor">0612</field>
+      <field name="active">1</field>
+      <field name="note">ASIR</field>
+    </record>
+    <record id="codigo_iscedf_dam" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_dam"/>
+      <field name="valor">0613</field>
+      <field name="active">1</field>
+      <field name="note">DAM</field>
+    </record>
+    <record id="codigo_iscedf_daw" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_daw"/>
+      <field name="valor">0613</field>
+      <field name="active">1</field>
+      <field name="note">DAW</field>
+    </record>
+
+    <record id="codigo_iscedf_gestion_admin" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_gestion_admin"/>
+      <field name="valor">0413</field>
+      <field name="active">1</field>
+      <field name="note">Gestión Administrativa</field>
+    </record>
+    <record id="codigo_iscedf_admin_finanzas" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_admin_finanzas"/>
+      <field name="valor">0413</field>
+      <field name="active">1</field>
+      <field name="note">Administración y Finanzas</field>
+    </record>
+
+    <!-- conduccion_transportes: sin código, omitimos para dejar vacío -->
+    <record id="codigo_iscedf_comercio_internacional" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_comercio_internacional"/>
+      <field name="valor">0416</field>
+      <field name="active">1</field>
+      <field name="note">Comercio Internacional</field>
+    </record>
+    <record id="codigo_iscedf_transporte_logistica" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_transporte_logistica"/>
+      <field name="valor">1041</field>
+      <field name="active">1</field>
+      <field name="note">Transporte y Logística</field>
+    </record>
+
+    <record id="codigo_iscedf_aux_enfermeria" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_aux_enfermeria"/>
+      <field name="valor">0913</field>
+      <field name="active">1</field>
+      <field name="note">Aux. Enfermería</field>
+    </record>
+    <record id="codigo_iscedf_farmacia" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_farmacia"/>
+      <field name="valor">0916</field>
+      <field name="active">1</field>
+      <field name="note">Farmacia</field>
+    </record>
+    <record id="codigo_iscedf_dependencia" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_dependencia"/>
+      <field name="valor">0921</field>
+      <field name="active">1</field>
+      <field name="note">Dependencia</field>
+    </record>
+    <record id="codigo_iscedf_laboratorio" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_laboratorio"/>
+      <field name="valor">0914</field>
+      <field name="active">1</field>
+      <field name="note">Laboratorio</field>
+    </record>
+    <record id="codigo_iscedf_dietetica" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_dietetica"/>
+      <field name="valor">0917</field>
+      <field name="active">1</field>
+      <field name="note">Dietética</field>
+    </record>
+
+    <record id="codigo_iscedf_integracion" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_integracion"/>
+      <field name="valor">0923</field>
+      <field name="active">1</field>
+      <field name="note">Integración Social</field>
+    </record>
+    <record id="codigo_iscedf_educacion_infantil" model="erasmus.codigo">
+      <field name="key">codigo_iscedf</field>
+      <field name="ciclo_id" ref="gestion_erasmus.ciclo_educacion_infantil"/>
+      <field name="valor">0110</field>
+      <field name="active">1</field>
+      <field name="note">Educación Infantil</field>
+    </record>
+  </data>
+</odoo>

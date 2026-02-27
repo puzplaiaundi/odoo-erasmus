@@ -1,0 +1,70 @@
+/* Imagen superpuesta solo cuando la tarjeta está archivada */
+.ge-archived-overlay {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 64px;
+  height: 64px;
+  z-index: 20;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+.ge-archived-overlay img {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  object-fit: contain;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+/* Form view: container and overlay to mimic kanban badge top-right */
+.ge-archived-sheet {
+  position: relative;
+}
+.ge-archived-overlay--form {
+  position: absolute !important;
+  /* pegar arriba-derecha ignorando el padding del sheet (≈16px) */
+  top: -25px;
+  right: -25px;
+  left: auto;
+  z-index: 20;
+  pointer-events: none;
+  display: block;
+  overflow: hidden;
+  background: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+  /* anular tamaño del overlay genérico (64x64) */
+  width: auto !important;
+  height: auto !important;
+}
+.ge-archived-overlay--form img {
+  height: auto;
+  width: 120px; /* tamaño grande en formulario */
+  max-width: none;
+  margin: 0;
+}
+/* Tarjeta kanban: sin padding ni bordes; recorta overflow para que la imagen no se salga */
+.oe_kanban_global_click.o_kanban_record,
+.o_kanban_record {
+  position: relative;
+  padding: 0 !important;
+  border: 0 !important;
+  box-shadow: none;
+  overflow: hidden; /* evita que la imagen se vea fuera de la tarjeta */
+}
+/* Borde uniforme sobrepuesto (evita discrepancias en lado inferior) */
+.ge-card-border {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 1px solid rgba(0,0,0,.25);
+  z-index: 5;
+  box-sizing: border-box;
+}
+/* Sin estilos especiales para no archivados: se quedan normales */

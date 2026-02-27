@@ -1,0 +1,24 @@
+<odoo>
+  <data noupdate="1">
+    <record id="module_category_erasmus" model="ir.module.category">
+      <field name="name">ERASMUS</field>
+      <field name="description">Permisos específicos del módulo Gestión Erasmus</field>
+      <field name="sequence">25</field>
+      <field name="parent_id" eval="False"/>
+    </record>
+
+    <record id="group_erasmus_profesor" model="res.groups">
+      <field name="name">Profesor</field>
+      <field name="category_id" ref="gestion_erasmus.module_category_erasmus"/>
+      <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_erasmus_admin" model="res.groups">
+      <field name="name">Administrador</field>
+      <field name="category_id" ref="gestion_erasmus.module_category_erasmus"/>
+      <!-- No implicar al grupo profesor para que no herede sus menús -->
+      <!-- Admin ya tendrá base.group_system; no añadimos implicación adicional aquí -->
+      <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+  </data>
+</odoo>

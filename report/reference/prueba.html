@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Convenio de Subvención con Participantes (KA131-HED) Erasmus+ - 2025</title>
+    <style>
+        /* Base typography and layout tuned for print/PDF fidelity */
+        body {
+            font-family: "Arial", "Helvetica", sans-serif;
+            margin: 0;
+            line-height: 1.5;
+            color: #000;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        /* A4 page setup */
+        @page {
+            size: A4;
+            margin: 20mm 15mm 22mm 15mm; /* top right bottom left */
+        }
+        /* Running header/footer areas for print */
+        header.print-header {
+            position: running(page-header);
+        }
+        footer.print-footer {
+            position: running(page-footer);
+        }
+        /* Inject header/footer on each printed page */
+        @media print {
+            .page { break-inside: avoid; }
+            .page::before {
+                content: element(page-header);
+                display: block;
+                height: 0;
+            }
+            .page::after {
+                content: element(page-footer);
+                display: block;
+                height: 0;
+            }
+            /* Page number in footer */
+            .footer-page-number::after {
+                content: "Página " counter(page);
+            }
+        }
+
+        /* Content container mimicking PDF margins */
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm 15mm 22mm 15mm; /* mirror @page for on-screen preview */
+            box-sizing: border-box;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            height: 50px; /* Ajusta según el tamaño real de los logos */
+        }
+        h1 {
+            font-size: 16pt;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        h2 {
+            font-size: 14pt;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        h2 + p { /* tighter spacing under headings */
+            margin-top: 0;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            padding-left: 0;
+            margin-top: 8px;
+            margin-bottom: 12px;
+        }
+        .checkbox {
+            font-size: 12pt;
+            margin-right: 5px;
+            display: inline-block;
+            width: 12pt;
+            text-align: center;
+            border: 1pt solid #000;
+            line-height: 12pt;
+            vertical-align: middle;
+        }
+        .checkbox.checked::after {
+            content: "X";
+            font-weight: bold;
+        }
+        .checkbox.unchecked::after {
+            content: "\00a0"; /* empty */
+        }
+        .placeholder {
+            color: #666;
+            font-style: italic;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+        .signature {
+            width: 45%;
+            text-align: center;
+        }
+        /* Header/Footer visual styles */
+        .print-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 9pt;
+            border-bottom: 0.75pt solid #000;
+            padding-bottom: 6pt;
+            margin-bottom: 10pt;
+        }
+        .print-footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8.5pt;
+            border-top: 0.75pt solid #000;
+            padding-top: 6pt;
+            margin-top: 12pt;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Running header/footer definitions (used on every printed page) -->
+    <header class="print-header">
+        <div class="print-header-content">
+            <img src="https://example.com/eu-flag.png" alt="EU Flag" style="height:16pt;"> <!-- Reemplaza con URL real o base64 -->
+            <span>Co-funded by the European Union</span>
+            <img src="https://example.com/plaiaundi-logo.png" alt="PLAIAUNDI LHII-CIFP" style="height:16pt;"> <!-- Reemplaza con URL real o base64 -->
+        </div>
+    </header>
+    <footer class="print-footer">
+        <div class="print-footer-content">
+            <span>Convenio de Subvención Erasmus+ 2025</span>
+            <span class="footer-page-number"></span>
+        </div>
+    </footer>
+
+    <!-- Página 1 -->
+    <div class="page">
+        <div class="header">
+            <img src="https://example.com/eu-flag.png" alt="EU Flag"> <!-- Reemplaza con URL real o base64 -->
+            <span>Co-funded by the European Union</span>
+            <img src="https://example.com/plaiaundi-logo.png" alt="PLAIAUNDI LHII-CIFP"> <!-- Reemplaza con URL real o base64 -->
+        </div>
+
+    <h1>ANEXO 6: MODELO DE CONVENIO DE SUBVENCIÓN ENTRE BENEFICIARIOS Y PARTICIPANTES</h1>
+
+    <h2>CONVENIO – ERASMUS+ - MOVILIDAD DE LAS PERSONAS</h2>
+
+    <p>Número del proyecto: 2025-1-ES01-KA131-HED-000306132</p>
+    <p>Sector: Educación Superior</p>
+    <p>Curso académico: 2025/2026.</p>
+    <p>Nº de identificación de la movilidad Erasmus+: <span class="placeholder">[si estuviera disponible]</span></p>
+
+    <h2>PREÁMBULO</h2>
+
+    <p>El presente <strong>Convenio</strong> (en lo sucesivo, «el Convenio») se celebra <strong>entre</strong> las partes que siguen:</p>
+
+    <p><strong>por una parte,</strong> la Organización (en lo sucesivo, «la organización»), CIFP Plajaundi LHII con Código Erasmus E SAN-SEB30</p>
+
+    <p><strong>y</strong></p>
+
+    <p><strong>por otra parte,</strong> el <strong>‘participante’</strong></p>
+
+    <p><span class="placeholder">[Nombre y apellidos]</span>, con domicilio en la siguiente dirección: <span class="placeholder">[dirección oficial completa]</span></p>
+
+    <p>Fecha de nacimiento: <span class="placeholder">[fecha]</span></p>
+
+    <p>Teléfono: <span class="placeholder">[teléfono]</span></p>
+
+    <p>Correo electrónico: <span class="placeholder">[correo electrónico]</span></p>
+
+    <p>Cuenta bancaria donde se abonará la ayuda financiera: <span class="placeholder">[cuenta]</span></p>
+
+    <p>Titular de la cuenta bancaria: <span class="placeholder">[titular]</span></p>
+
+    <p>Nombre del banco: <span class="placeholder">[nombre banco]</span></p>
+
+    <p>Código de clasificación bancaria/BIC/SWIFT: <span class="placeholder">[código]</span></p>
+
+    <p>Número de cuenta / Código IBAN: <span class="placeholder">[IBAN]</span></p>
+
+    <p>Las partes mencionadas anteriormente han convenido en celebrar el Convenio.</p>
+
+    <p>El Convenio consta de:</p>
+
+    <p>Condiciones</p>
+
+    </div>
+    <div class="page page-break"></div>
+
+    <!-- Página 2 -->
+    <div class="page">
+    <p>Convenio de subvención con participantes (KA131-HED y KA171-HED) Erasmus+ - 2025</p>
+
+    <p>Anexo 1: Acuerdo de Aprendizaje Erasmus+ para la movilidad de estudiantes para prácticas<sup>1</sup></p>
+
+    <p>Anexo 2: Carta del Estudiante Erasmus</p>
+
+    <p>Anexo 3: Convenio de Financiación con el Gobierno Vasco</p>
+
+    <p>Lo dispuesto en las condiciones prevalecerá sobre lo dispuesto en los anexos.</p>
+
+    <p>El importe total incluirá :</p>
+    <ul>
+        <li><span class="checkbox checked"></span> Importe base del apoyo individual para la movilidad física de larga duración</li>
+        <li><span class="checkbox unchecked"></span> Importe base del apoyo individual para la movilidad física de corta duración</li>
+        <li><span class="checkbox unchecked"></span> Ayuda adicional para estudiantes y titulados recientes con menos oportunidades en movilidades de larga duración</li>
+        <li><span class="checkbox unchecked"></span> Ayuda adicional para estudiantes y titulados recientes con menos oportunidades en movilidades de corta duración</li>
+        <li><span class="checkbox checked"></span> Ayuda adicional para estudiantes en actividades de prácticas</li>
+        <li><span class="checkbox unchecked"></span> Apoyo para viaje (ecológico o no ecológico)</li>
+        <li><span class="checkbox unchecked"></span> Días de viaje (días de apoyo individual adicional)</li>
+        <li><span class="checkbox unchecked"></span> Apoyo a la inclusión (basado en costes reales/efectivos)</li>
+    </ul>
+
+    <p>El participante recibirá :</p>
+    <ul>
+        <li><span class="checkbox checked"></span> Una ayuda financiera de fondos Erasmus + de la UE</li>
+        <li><span class="checkbox unchecked"></span> Una beca cero</li>
+        <li><span class="checkbox unchecked"></span> Una ayuda financiera parcial de fondos Erasmus+ de la UE para una parte de la duración física de la actividad</li>
+    </ul>
+
+    <h2>CONDICIONES</h2>
+
+    <h2>CLÁUSULA 1 – OBJETO DEL CONVENIO</h2>
+
+    <p>1.1 El presente Convenio establece los derechos, las obligaciones y las condiciones aplicables a la subvención que se conceda para la ejecución de una actividad de movilidad en el marco del programa Erasmus+.</p>
+
+    <p>1.2 La organización proporcionará apoyo al participante para realizar la actividad de movilidad.</p>
+
+    <p>1.3 El participante acepta la ayuda financiera o la provisión de servicios especificada en la cláusula 3 y se compromete a realizar la actividad de movilidad tal como se describe en el Anexo 1.</p>
+
+    <p>1.4 Las enmiendas al Convenio se solicitarán y acordarán por ambas partes mediante una notificación formal por carta o correo electrónico.</p>
+
+    <p><sup>1</sup> No es obligatorio que los documentos descritos en el Anexo 1 de este convenio lleven firmas originales: dependiendo de la legislación nacional o de la normativa institucional, se podrán admitir copias escaneadas de las firmas, así como firmas electrónicas (incluidas las realizadas a través de la red Erasmus sin papel (EWP).</p>
+
+    </div>
+    <div class="page page-break"></div>
+
+    <!-- Página 3 -->
+    <div class="page">
+    <p>Convenio de subvención con participantes (KA131-HED y KA171-HED) Erasmus+ - 2025</p>
+
+    <h2>CLÁUSULA 2 –DURACIÓN DE LA MOVILIDAD</h2>
+
+    <p>2.1 El periodo de movilidad comenzará el <span class="placeholder">[fecha]</span> y finalizará el <span class="placeholder">[fecha]</span>.</p>
+
+    <p>2.2 El periodo cubierto por este Convenio incluye:</p>
+
+    <ul>
+        <li>un periodo de movilidad física entre el <span class="placeholder">[fecha]</span> y el <span class="placeholder">[fecha]</span>, igual a 89 días de movilidad</li>
+        <li><span class="placeholder">[Opción: […] días de viaje financiados]</span></li>
+        <li><span class="placeholder">[Opción para movilidad combinada: un componente virtual entre el [fecha] y el [fecha]]</span></li>
+    </ul>
+
+    <p>2.3 El <span class="placeholder">[escoger la opción pertinente: Certificado académico / Certificado de prácticas / Certificado de estancia (o una declaración adjunta a estos documentos)]</span> deberá indicar las fechas confirmadas del inicio y la finalización de la duración del periodo de movilidad, incluyendo el componente virtual.</p>
+
+    <h2>CLÁUSULA 3 – AYUDA FINANCIERA Y APOYO AL PARTICIPANTE</h2>
+
+    <p>3.1 La ayuda financiera se calculará según las reglas de financiación indicadas en la Guía del Programa Erasmus+ <span class="placeholder">[versión 2025]</span>.</p>
+
+    <p>3.2 El participante recibirá una ayuda financiera de fondos Erasmus+ de la UE por […] días. <span class="placeholder">[El número de días indicado será igual a la duración del periodo físico de movilidad más días de viaje, si procede; si el participante no recibirá ayuda financiera en una parte o durante todo el periodo de movilidad, se ajustará el número de días como corresponda]</span></p>
+
+    <p>3.3 El participante podrá remitir una solicitud para ampliar el periodo físico de movilidad, dentro de la duración máxima de la actividad establecida en la Guía del Programa Erasmus+ <span class="placeholder">[versión 2025]</span>, de […] días <span class="placeholder">[el beneficiario completará la información según la normativa de la Guía del Programa<sup>2</sup>]</span>. Si la organización acepta ampliar el periodo de movilidad, se realizará la pertinente enmienda al Convenio.</p>
+
+    <p>3.4 <span class="placeholder">[En el caso de estudiantes, el beneficiario seleccionará la opción 1 o la opción 3]</span></p>
+
+    <p><span class="placeholder">[En el caso de personal, el beneficiario seleccionará la opción 1, la opción 2 o la opción 3]</span></p>
+
+    <p><span class="placeholder">[Opción 1<sup>3</sup>:</span></p>
+
+    <p>La organización proporcionará al participante una ayuda financiera total por el periodo de movilidad <span class="placeholder">[Opción si procede: y días de viaje]</span> en forma de un pago de […]  EUR. / <span class="placeholder">[Opción para participantes con beca cero: 0]</span></p>
+
+    <p><span class="placeholder">[Opción 2:</span></p>
+
+    <p><sup>3</sup> Nota SEPIE: Opción por defecto para movilidades de estudiantes en proyectos KA131-HED.</p>
+
+    <p><sup>2</sup> Nota SEPIE. La ampliación de estancia deberá tener en cuenta la duración máxima permitida (en el caso de movilidades de estudiantes esta es de 12 meses por nivel de estudios y en el caso de movilidades de personal de 2 meses por movilidad) a la que se le restará el periodo de movilidad indicado en la cláusula 2.2.</p>
+
+    </div>
+    <div class="page page-break"></div>
+
+    <!-- Página 4 -->
+    <div class="page">
+    <p>Convenio de subvención con participantes (KA131-HED y KA171-HED) Erasmus+ - 2025</p>
+
+    <p>La organización proporcionará al participante el apoyo necesario en forma de provisión directa de los servicios requeridos. La organización se asegurará de que la provisión de los servicios cumpla con los estándares de calidad y seguridad oportunos.]</p>
+
+    <p><span class="placeholder">[Opción 3:</span></p>
+
+    <p>La organización proporcionará al participante el apoyo necesario en forma de un pago por importe de […] EUR y en forma de provisión directa por <span class="placeholder">[viaje/estancia]</span>. La organización se asegurará de que la provisión directa de los servicios cumpla con los estándares de calidad y seguridad oportunos. ]</p>
+
+    <p>3.5 La ayuda financiera proporcionada para <span class="placeholder">[seleccione lo que proceda: apoyo a la inclusión, costes excepcionales por gastos de viaje onerosos, apoyo de viaje, ayuda adicional para menos oportunidades]</span>, se basará en la documentación justificativa aportada por el participante.</p>
+
+    <h2>CLÁUSULA 4- DERECHO A LA AYUDA FINANCIERA</h2>
+
+    <p>4.1 El participante tendrá derecho a la ayuda financiera según lo establecido en la cláusula 3, si, efectivamente, ha realizado la actividad de movilidad durante el periodo contemplado en la cláusula 2.</p>
+
+    <p>4.2 Cuando la ayuda financiera se sustente en costes reales, éstos se justificarán en documentos de apoyo como facturas, recibos, etc.</p>
+
+    <p>4.3 La ayuda financiera no podrá ser utilizada para cubrir gastos similares ya financiados por fondos de la UE. Sin embargo, será compatible con otras fuentes de financiación. Estas incluyen ingresos que el participante pudiera percibir por prácticas o actividades docentes, siempre y cuando se lleven a cabo las actividades previstas en el Anexo 1.</p>
+
+    <p>4.4 El participante no podrá reclamar el reembolso por pérdidas debidas al cambio de divisas o por costes bancarios cargados por el banco del participante en transferencias desde la organización de envío.</p>
+
+    <h2>CLÁUSULA 5 – MODALIDADES DE PAGO</h2>
+
+    <p><span class="placeholder">[Opción en caso de que en la cláusula 3.4 se haya seleccionado la opción 1 o la opción 3</span></p>
+
+    <p>5.1 <span class="placeholder">[Opción para movilidad saliente</span></p>
+
+    <p>Se realizará un pago al participante no más tarde de (lo que suceda en primer lugar):</p>
+
+    <ul>
+        <li>Los 30 días naturales posteriores a la firma del Convenio por ambas partes.</li>
+        <li><span class="placeholder">[El beneficiario seleccionará una opción: La fecha de inicio de la movilidad / [esta opción no procede en el caso de participantes que reciban la ayuda adicional para menos oportunidades o el apoyo a la inclusión:] Tras la recepción de la confirmación de la llegada.]</span></li>
+    </ul>
+
+    <p><span class="placeholder">[Opción para movilidad entrante</span></p>
+
+    <p>El participante recibirá el apoyo individual y de viaje, si procede, en tiempo y forma después de su llegada.]</p>
+
+    </div>
+    <div class="page page-break"></div>
+
+    <!-- Página 5 -->
+    <div class="page">
+    <p>Convenio de subvención con participantes (KA131-HED y KA171-HED) Erasmus+ - 2025</p>
+
+    <p>Este pago representará el […%] <span class="placeholder">[la organización escogerá entre el 70% y el 100%]</span> del importe especificado en la cláusula 3. Cuando el participante no aporte la documentación justificativa en los plazos establecidos por la organización beneficiaria, se admitirá excepcionalmente un pago de prefinanciación posterior, basándose en razones justificadas.</p>
+
+    <p><span class="placeholder">[Opción si el pago indicado en la cláusula 4.1 fuera inferior al100% de la ayuda financiera</span></p>
+
+    <p>5.2 El envío del cuestionario UE (EU survey) en línea se considerará como la solicitud del participante del pago del saldo de la ayuda financiera. La organización dispondrá de <span class="placeholder">[Opción para movilidad saliente: 45] [Opción para movilidad entrante: 20]</span> días naturales para realizar el pago del saldo o emitir una orden de recuperación de fondos en el caso en que proceda reembolso.]</p>
+
+    <p><span class="placeholder">[Opción en caso de que en la cláusula 3.4 se haya seleccionado la opción 2</span></p>
+
+    <p>No procede.]</p>
+
+    <h2>CLÁUSULA 6 – DEVOLUCIÓN DE LA AYUDA FINANCIERA POR EL PARTICIPANTE</h2>
+
+    <p>6.1 Si el participante incumpliera las condiciones del convenio o rescinde el convenio antes de su finalización por razones diferentes a las estipuladas en la cláusula 13.1, deberá devolver el importe de ayuda financiera que se le hubiera abonado, salvo acuerdo en términos diferentes con la organización de envío. En este último caso, el beneficiario deberá informar a la Agencia Nacional para su aceptación.</p>
+
+    <h2>CLÁUSULA 7- SEGURO</h2>
+
+    <p>7.1 La organización deberá asegurarse de que el participante dispone de una cobertura de seguro adecuada, de forma previa al inicio de la movilidad, bien contratando ella misma dicha cobertura, bien acordando con la organización de acogida que esta la contrate, o bien proporcionando al participante la información que proceda y el apoyo para que la contrate por su cuenta.</p>
+
+    <p>CIFP Plaiaundi se ocupa de que todos los participantes conozcan el proceso para la obtención de la Tarjeta Sanitaria Europea asesorandolos en caso necesarios.</p>
+
+    <p>Así pues todos los participantes disponen de la Tarjeta Sanitaria Europea, antes de la partida, condición indispensable para poder tomar parte en el programa. También disponen de un seguro de responsabilidad civil y accidentes proporcionado por el Gobierno Vasco.</p>
+
+    <p>7.2 El seguro incluirá al menos la cobertura de seguro médico obligatorio en prácticas y una cobertura de seguro de responsabilidad civil y una cobertura de seguro de accidentes]. [Explicación: en el caso de movilidades intraeuropeas, el seguro médico nacional del participante incluirá una cobertura básica durante su estancia en otro país de la UE a través de la Tarjeta Sanitaria Europea. Sin embargo, esta cobertura puede no ser suficiente en todas las situaciones, por ejemplo, en caso de repatriación o de intervención médica específica o para movilidades internacionales. Por ello, se podría necesitar un seguro privado complementario. Los seguros de responsabilidad civil y de accidentes cubren daños causados por el participante o al participante durante su estancia en el extranjero. Existen mecanismos diferentes con relación a estos seguros en los distintos países, por lo que los participantes corren el riesgo de estar excluidos si solo disponen de cobertura básica, por ejemplo, si no se les considera como empleados o formalmente matriculados en su organización de acogida. Además de todo lo anterior, también se recomienda un seguro que cubra la pérdida o el robo de documentación, billetes de viaje y equipaje.]</p>
+
+    <p>[Se recomienda también incluir la siguiente información:]<span class="placeholder">[compañía(s) aseguradora(s), número/referencia y póliza del seguro]</span></p>
+
+    <p>7.3 La parte responsable de contratar el seguro, que cubra todo el periodo de la movilidad, es <span class="placeholder">[la organización de envío o el participante o la organización de acogida]</span> [En caso de que haya seguros separados, las partes responsables podrán ser diferentes, con lo que se indicarán aquí según sus respectivas responsabilidades].</p>
+
+    </div>
+    <div class="page page-break"></div>
+
+    <!-- Página 6 -->
+    <div class="page">
+    <p>Convenio de subvención con participantes (KA131-HED y KA171-HED) Erasmus+ - 2025</p>
+
+    <h2>CLÁUSULA 8 – NIVEL LINGÜÍSTICO Y APOYO LINGÜÍSTICO EN LÍNEA (OLS)</h2>
+
+    <p>8.1 El participante podrá realizar la evaluación en línea de su competencia lingüística en el idioma de su movilidad (si estuviera disponible) antes de la movilidad y seguir cursos disponibles en la plataforma OLS.</p>
+
+    <p><span class="placeholder">[Opción en caso de que no se incluya en el acuerdo de aprendizaje</span></p>
+
+    <p>8.2 El nivel de competencia lingüística en <span class="placeholder">[especificar la lengua principal de instrucción / trabajo]</span> que el participante posee o que se compromete a obtener en el momento de iniciar su movilidad es: A1<span class="unchecked">☐</span> A2<span class="unchecked">☐</span> B1<span class="unchecked">☐</span> B2<span class="unchecked">☐</span> C1<span class="unchecked">☐</span> C2<span class="unchecked">☐</span>.]</p>
+
+    <h2>CLÁUSULA 9 – INFORME FINAL DEL PARTICIPANTE</h2>
+
+    <p>9.1 El participante deberá cumplimentar y enviar el informe final sobre su experiencia de movilidad (a través de la herramienta en línea EU Survey) en los <span class="placeholder">[Opción para movilidad entrante de estudiantes de larga duración: 10 / Opción para el resto de movilidades: 30]</span> días naturales posteriores a la recepción de la invitación para cumplimentarlo. La organización podrá requerir a los participantes que no cumplimenten y envíen el informe final en línea el reembolso parcial o total de la ayuda financiera recibida.</p>
+
+    <p><span class="placeholder">[Opción para movilidades de estudiantes para estudios.</span></p>
+
+    <p>9.2 Se le podrá enviar al participante un cuestionario complementario en línea que permita recabar información completa sobre asuntos relacionados con el reconocimiento. ]</p>
+
+    <h2>CLÁUSULA 10 – ÉTICA Y VALORES</h2>
+
+    <p>10.1 La acción deberá realizarse en consonancia con los valores éticos más elevados y de conformidad con el Derecho nacional, internacional y de la UE aplicable.</p>
+
+    <p>10.2 La partes deberán comprometerse a garantizar el respeto de los valores fundamentales de la UE (como el respeto de la dignidad humana, la libertad, la democracia, la igualdad, el Estado de Derecho y los derechos humanos, incluidos los derechos de las minorías).</p>
+
+    <p>10.3 Si el participante incumple alguna de sus obligaciones en virtud de la presente cláusula, la ayuda financiera podrá reducirse o no abonarse.</p>
+
+    </div>
+    <div class="page page-break"></div>
+
+    <!-- Página 7 -->
+    <div class="page">
+    <p>Convenio de subvención con participantes (KA131-HED y KA171-HED) Erasmus+ - 2025</p>
+
+    <h2>CLÁUSULA 11 – PROTECCIÓN DE DATOS</h2>
+
+    <p>11.1 Todos los datos de carácter personal que figuren en el Convenio serán procesados bajo la responsabilidad del responsable de datos identificado en la declaración de privacidad de conformidad con la legislación aplicable en materia de protección de datos, en particular con el Reglamento (UE) nº 2018/1725<sup>4</sup> y los actos nacionales de protección de datos conexos y para los fines establecidos en la Declaración de privacidad que puede consultarse en el enlace siguiente: https://webgate.ec.europa.eu/erasmus-esc/index/privacy-statement.</p>
+
+    <p>11.2 Estos datos serán procesados únicamente a efectos de la gestión y el seguimiento del Convenio por la institución de envío, la Agencia Nacional y la Comisión Europea, sin perjuicio de su posible transmisión a los organismos encargados de las tareas de inspección y auditoría en aplicación del Derecho de la UE (Tribunal de Cuentas u Oficina Europea de Lucha contra el Fraude (OLAF)).</p>
+
+    <p>11.3 El participante podrá, previa solicitud por escrito, acceder a sus datos de carácter personal y rectificar cualquier información errónea o incompleta. Cualquier cuestión relacionada con el procesamiento de sus datos de carácter personal deberá remitirse a la organización de envío y/o a la Agencia Nacional. El participante podrá presentar una reclamación contra el procesamiento de sus datos de carácter personal al Supervisor Europeo de Protección de Datos en relación con el uso de los datos por parte de la Comisión Europea.</p>
+
+    <h2>CLÁUSULA 12 – SUSPENSIÓN DEL CONVENIO</h2>
+
+    <p>12.1 El Convenio podrá suspenderse a iniciativa del participante o de la organización si circunstancias excepcionales, en particular de fuerza mayor (véase la cláusula 16), hacen que su ejecución resulte imposible o excesivamente dificultosa. La suspensión surtirá efecto en la fecha acordada por escrito por las partes. El Convenio podrá reanudarse posteriormente.</p>
+
+    <p>12.2 Cualquiera de las partes podrá suspender el Convenio en cualquier momento, si la otra parte ha cometido o se sospecha que ha cometido:</p>
+
+    <p>a) errores sustanciales, irregularidades o fraude, o</p>
+
+    <p>b) un incumplimiento grave de las obligaciones establecidas en el presente Convenio o durante el procedimiento de adjudicación (incluida la ejecución incorrecta de la acción, la presentación de información falsa, la no presentación de la información requerida y la violación de las normas éticas y de seguridad, si procede, etc.).</p>
+
+    <p>12.3 Una vez que las circunstancias permitan reanudar la ejecución, las partes deberán acordar de inmediato la fecha de reanudación (un día después de la fecha en que finalice la suspensión). La suspensión se levantará con efectos a partir de la fecha en que finalice la suspensión.</p>
+
+    <p>12.4 Durante la suspensión, no se abonarán ayudas financieras al participante.</p>
+
+    <p><sup>4</sup> Reglamento (UE) nº 2018/1725 del Parlamento Europeo y del Consejo relativo a la protección de las personas físicas en lo que respecta al tratamiento de los datos de carácter personal por parte de las instituciones y los organismos de la UE y la libre circulación de dichos datos y por el que se deroga el Reglamento (CE) n.º 45/2001 y la Decisión n.º 1247/2002/CE.</p>
+
+    </div>
+    <div class="page page-break"></div>
+
+    <!-- Página 8 -->
+    <div class="page">
+    <p>Convenio de subvención con participantes (KA131-HED y KA171-HED) Erasmus+ - 2025</p>
+
+    <p>12.5 El participante no podrá reclamar daños y perjuicios debido a la suspensión por la organización.</p>
+
+    <p>12.6 La suspensión no afecta al derecho de la organización a rescindir el Convenio (véase la cláusula 13).</p>
+
+    <h2>CLÁUSULA 13 – RESCISIÓN DEL CONVENIO</h2>
+
+    <p>13.1 El participante o la organización podrán resolver el Convenio si sobrevienen circunstancias que hagan que su ejecución resulte imposible o excesivamente dificultosa.</p>
+
+    <p>13.2 En dichos supuestos de resolución, el participante tendrá derecho a percibir como mínimo el importe de la ayuda financiera correspondiente a la duración real del período de actividad. El participante tendrá que devolver cualquier fondo restante.</p>
+
+    <p>13.3 En caso de incumplimiento grave de las obligaciones recogidas en el presente Convenio, o si cualquiera de las partes ha cometido irregularidades, fraude, corrupción, o está implicado en una organización delictiva, blanqueo de capitales, delitos relacionados con el terrorismo (incluida la financiación del terrorismo), trabajo infantil o trata de seres humanos, la otra parte tendrá derecho a resolver el Convenio notificándolo a la otra parte, de manera formal.</p>
+
+    <p>13.4 La organización se reserva el derecho a incoar una acción ante los tribunales si algún reembolso solicitado no se efectuara voluntariamente dentro del plazo notificado al participante por correo certificado.</p>
+
+    <p>13.5 La resolución surtirá efecto en la fecha especificada en la notificación, como «fecha de resolución»).</p>
+
+    <p>13.6 El participante no podrá reclamar daños y perjuicios debido a la resolución por la organización.</p>
+
+    <h2>CLÁUSULA 14 – CONTROLES Y AUDITORÍAS</h2>
+
+    <p>14.1 Las partes del Convenio se comprometen a proporcionar cualquier información detallada que solicite la Comisión Europea, la Agencia Nacional de España o cualquier otro organismo autorizado por la Comisión Europea o la Agencia Nacional de España a efectos de verificar la correcta ejecución del período de movilidad y de las disposiciones del Convenio.</p>
+
+    <p>14.2 Toda constatación relacionada con el Convenio podrá revertir en la aplicación de las medidas establecidas en la cláusula 6 u otras acciones judiciales a efectos de la legislación nacional aplicable.</p>
+
+    <h2>CLÁUSULA 15 – DAÑOS Y PERJUICIOS</h2>
+
+    <p>15.1 Cada una de las partes del presente Convenio exonerará a la otra de cualquier responsabilidad civil por daños causados por esta o su personal como consecuencia de la ejecución del presente Convenio, siempre que tales daños no sean consecuencia de faltas graves y premeditadas por parte de la otra parte o su personal.</p>
+
+    <p>15.2 La Agencia Nacional de España, la Comisión Europea o su personal, en caso de reclamación derivada del Convenio, no serán responsables de ningún daño causado durante la ejecución del período de movilidad. En consecuencia, la Agencia Nacional de España o la Comisión Europea no admitirán ninguna solicitud de indemnización de reembolso que acompañe a tal reclamación.</p>
+
+    </div>
+    <div class="page page-break"></div>
+
+    <!-- Página 9 -->
+    <div class="page">
+    <p>Convenio de subvención con participantes (KA131-HED y KA171-HED) Erasmus+ - 2025</p>
+
+    <h2>CLÁUSULA 16 – FUERZA MAYOR</h2>
+
+    <p>16.1 La parte que se encuentre en una situación de fuerza mayor no se considerará incursa en incumplimiento de sus obligaciones.</p>
+
+    <p>16.2 Por «fuerza mayor» se entenderá cualquier situación o suceso que:</p>
+
+    <ul>
+        <li>impida a cualquiera de las partes cumplir sus obligaciones en virtud del Convenio,</li>
+        <li>constituya una situación excepcional e imprevisible, ajena al control de las partes,</li>
+        <li>no se deba a error o negligencia de su parte (o de parte de otras entidades participantes implicadas en la acción), y</li>
+        <li>resulte inevitable a pesar de ejercer la debida diligencia.</li>
+    </ul>
+
+    <p>16.3 Cualquier situación constitutiva de fuerza mayor deberá ser notificada oficialmente sin demora a la otra parte, precisando la naturaleza, la duración probable y los efectos previsibles.</p>
+
+    <p>16.4 Las partes deberán adoptar inmediatamente todas las medidas necesarias para limitar el perjuicio eventual resultante de un caso de fuerza mayor y hacer todo lo posible para reanudar la ejecución de la acción lo antes posible.</p>
+
+    <h2>CLÁUSULA 17 – LEGISLACIÓN APLICABLE Y TRIBUNALES COMPETENTES</h2>
+
+    <p>17.1 El Convenio se regirá por la legislación española.</p>
+
+    <p>17.2 Los tribunales competentes que se determinen en concordancia con la legislación nacional de aplicación serán la única jurisdicción que conocerá cualquier litigio entre la organización y el participante en todo lo relacionado con la interpretación, aplicación o validez de este Convenio, siempre que dicho litigio no pueda resolverse de forma amistosa.</p>
+
+    <h2>CLÁUSULA 18 – ENTRADA EN VIGOR</h2>
+
+    <p>El Convenio entrará en vigor el día de la firma por la organización o el participante, dependiendo de quien firme en último lugar.</p>
+
+    <div class="signatures">
+        <div class="signature">
+            <p>Por el participante</p>
+            <p><span class="placeholder">[nombre y apellidos]</span></p>
+            <p><span class="placeholder">[firma]</span></p>
+            <p>Hecho en <span class="placeholder">[lugar]</span>, <span class="placeholder">[fecha]</span></p>
+        </div>
+        <div class="signature">
+            <p>Por la organización</p>
+            <p><span class="placeholder">[nombre, apellidos y cargo]</span></p>
+            <p><span class="placeholder">[firma]</span></p>
+            <p>Hecho en <span class="placeholder">[lugar]</span>, <span class="placeholder">[fecha]</span></p>
+        </div>
+    </div>
+
+    </div>
+    <div class="page page-break"></div>
+
+    <!-- Página 10 -->
+    <div class="page">
+    <h2>Anexo 3: Convenio de Financiación con el Gobierno Vasco</h2>
+
+    <p>El participante recibirá una ayuda para la realización de la movilidad ofrecida por el Gobierno Vasco.</p>
+
+    <p>Dicha ayuda se percibirá conjuntamente con la ayuda financiera de fondos Erasmus + de la UE.</p>
+
+    <p>Su importe será de 716.20 EUR.</p>
+
+    <p>Las condiciones de aceptación, disfrute y devolución serán las mismas que en el caso de la ayuda financiera de fondos Erasmus + de la UE.</p>
+
+    <p>El participante se compromete a elaborar un informe para el Gobierno Vasco en los 10 días posteriores a la movilidad.</p>
+
+    <div class="signatures">
+        <div class="signature">
+            <p>Por el participante</p>
+            <p><span class="placeholder">[firma]</span></p>
+            <p>Hecho en Irún, 13.02.2026</p>
+        </div>
+        <div class="signature">
+            <p>Por la organización</p>
+            <p>Maialen López Luengo</p>
+            <p><span class="placeholder">[firma]</span></p>
+            <p>Hecho en Irún, 13.02.2026</p>
+        </div>
+    </div>
+
+    </div>
+    <div class="page page-break"></div>
+
+    <!-- Página 11 (duplicado con variaciones) -->
+    <div class="page">
+    <h2>Anexo 3: Convenio de Financiación con el Gobierno Vasco</h2>
+
+    <p>El participante recibirá una ayuda para la realización de la movilidad ofrecida por el Gobierno Vasco.</p>
+
+    <p>Dicha ayuda se percibirá conjuntamente con la ayuda financiera de fondos Erasmus + de la UE.</p>
+
+    <p>Su importe será de 716.20 EUR.</p>
+
+    <p>Las condiciones de aceptación, disfrute y devolución serán las mismas que en el caso de la ayuda financiera de fondos Erasmus + de la UE.</p>
+
+    <p>El participante se compromete a elaborar un informe para el Gobierno Vasco en los 10 días posteriores a la movilidad.</p>
+
+    <div class="signatures">
+        <div class="signature">
+            <p>Por el participante</p>
+            <p>Yanire Panadero Bermejo</p>
+            <p><span class="placeholder">[firma]</span></p>
+            <p>Hecho en Irún, 13.02.2025</p>
+        </div>
+        <div class="signature">
+            <p>Por la organización</p>
+            <p>Maialen López Luengo</p>
+            <p><span class="placeholder">[firma]</span></p>
+            <p>Hecho en Irún, 13.02.2025</p>
+        </div>
+    </div>
+
+    </div>
+    <div class="page page-break"></div>
+
+    <!-- Página 12 -->
+    <div class="page">
+    <h2>Anexo 1</h2>
+
+    <p><span class="placeholder">[KA1 – EDUCACIÓN SUPERIOR Seleccionar por la institución]</span></p>
+
+    <p>Acuerdo de Aprendizaje Erasmus+ para la movilidad de estudiantes para estudios</p>
+    <p>Acuerdo de Aprendizaje Erasmus+ para la movilidad de estudiantes para prácticas</p>
+
+    <p>Acuerdo de movilidad Erasmus+ de personal para docencia</p>
+    <p>Acuerdo de movilidad Erasmus+ de personal para formación</p>
+    </div>
+</body>
+</html>
