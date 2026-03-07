@@ -5,6 +5,14 @@ from odoo import api, fields, models
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
+    @property
+    def SELF_READABLE_FIELDS(self):
+        return super().SELF_READABLE_FIELDS + ['erasmus_role']
+
+    @property
+    def SELF_WRITEABLE_FIELDS(self):
+        return super().SELF_WRITEABLE_FIELDS + ['erasmus_role']
+
     erasmus_role = fields.Selection(
         selection=[
             ('', 'Sin acceso'),
@@ -13,7 +21,8 @@ class ResUsers(models.Model):
         ],
         string='Rol Erasmus',
         help='Controla el acceso al módulo Gestión Erasmus. "Sin acceso" no asigna ningún grupo.',
-        default=''
+        default='',
+        groups='base.group_system',
     )
 
     @api.onchange('erasmus_role')
