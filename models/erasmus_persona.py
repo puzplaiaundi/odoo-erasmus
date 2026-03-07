@@ -7,16 +7,13 @@ import unicodedata
 
 class ErasmusPersona(models.Model):
     _name = 'erasmus.persona'
-    _description = 'Persona Erasmus (Estudiante / Profesor / Acompaniante)'
+    _description = 'Persona Erasmus (Estudiante / Profesor / Acompañante)'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'nombre_completo'
     _order = 'apellido1, apellido2, nombre'
+    # Debug logging to trace street persistence
     _logger = logging.getLogger(__name__)
-
-    # ------------------------------------------------------------------
-    # Campos
-    # ------------------------------------------------------------------
-    # Archivado
+     # Archivado
     active = fields.Boolean(default=True, tracking=True)
 
     # Tipo
@@ -26,6 +23,173 @@ class ErasmusPersona(models.Model):
         ('profesor', 'Profesor'),
         ('acompaniante', 'Acompañante')
     ], string='Tipo', required=True, default='estudiante', index=True)
+
+    estado_documentacion = fields.Selection([
+        ('pendiente', 'Pendiente'),
+        ('en_proceso', 'En proceso'),
+        ('completo', 'Completo')
+    ], string='Estado de Documentación', default='pendiente', tracking=True)
+
+    @api.onchange('tipo_interno')
+    def _onchange_tipo_interno_estado_doc(self):
+        for rec in self:
+            if rec.tipo_interno != 'estudiante':
+                rec.estado_documentacion = False
+    # Relación profesor-alumnos
+    profesor_id = fields.Many2one(
+        'erasmus.persona',
+        string='Profesor asignado',
+        domain="[('tipo_interno', '=', 'profesor')]",
+        help='Profesor responsable de este estudiante',
+        tracking=True
+    )
+    alumno_ids = fields.One2many(
+        'erasmus.persona',
+        'profesor_id',
+        string='Alumnos a cargo',
+        help='Estudiantes asignados a este profesor',
+        tracking=True
+    )
+    # Relacionados auxiliares para filtros de seguridad / menús
+    profesor_user_id = fields.Many2one('res.users', string='Usuario Profesor', related='profesor_id.user_id', store=True, index=True, compute_sudo=True)
+    profesor_partner_id = fields.Many2one('res.partner', string='Contacto Profesor', related='profesor_id.partner_id', store=True, index=True, compute_sudo=True)
+
+    # Progreso de documentación (0-100) para tarjetas "Mis Alumnos"
+    # No almacenado: se recalcula al vuelo para reflejar cambios inmediatamente
+    progreso_documentacion = fields.Integer(string='Progreso', compute='_compute_progreso_documentacion', store=False)
+
+    # Flujo de revisión profesor/admin
+    revision_estado = fields.Selection([
+        ('no_enviado', 'No enviado'),
+        ('enviado', 'Enviado'),
+        ('en_revision', 'En revisión'),
+        ('revisado', 'Revisado'),
+        ('devuelto', 'Devuelto'),
+    ], string='Estado de revisión', default='no_enviado', tracking=True, index=True)
+    fecha_envio_revision = fields.Datetime(string='Fecha envío a revisión')
+    fecha_revision = fields.Datetime(string='Fecha revisión')
+    fecha_devolucion = fields.Datetime(string='Fecha devolución')
+    # Columna de Kanban para profesores: Pendiente / En proceso / Listo / Enviados
+    kanban_col_profesor = fields.Selection([
+        ('pendiente', 'Pendiente'),
+        ('en_proceso', 'En proceso'),
+        ('listo', 'Listo'),
+        ('enviados', 'Enviados'),
+    ], compute='_compute_kanban_col_profesor', string='Columna (Profesor)', store=True, index=True)
+
+    @api.depends(
+        'tipo_interno', 'revision_estado', 'estado_documentacion',
+        'nombre', 'apellido1', 'apellido2', 'nif', 'email', 'movil', 'centro_formacion',
+        'fecha_nacimiento', 'genero', 'nacionalidad',
+        'street', 'city', 'zip', 'state_id', 'country_id'
+    )
+    def _compute_kanban_col_profesor(self):
+        for rec in self:
+            col = False
+            if rec.tipo_interno == 'estudiante':
+                if rec.revision_estado in ('enviado', 'en_revision'):
+                    col = 'enviados'
+                elif rec.estado_documentacion == 'completo' or (rec.progreso_documentacion or 0) >= 100:
+                    col = 'listo'
+                elif rec.estado_documentacion == 'en_proceso' or (rec.progreso_documentacion or 0) > 0:
+                    col = 'en_proceso'
+                else:
+                    col = 'pendiente'
+            rec.kanban_col_profesor = col
+
+    # --- Acciones profesor/admin ---
+    def _ensure_profesor_scope(self):
+        """Profesores solo sobre sus alumnos."""
+        if self.env.user.has_group('gestion_erasmus.group_erasmus_profesor') and not self.env.user.has_group('gestion_erasmus.group_erasmus_admin'):
+            invalid = self.filtered(lambda r: r.profesor_user_id.id != self.env.user.id)
+            if invalid:
+                raise ValidationError('No puedes operar sobre alumnos que no están a tu cargo.')
+
+    def _ensure_admin(self):
+        if not self.env.user.has_group('gestion_erasmus.group_erasmus_admin'):
+            raise ValidationError('Acción reservada para administradores.')
+
+    def action_enviar_borradores(self):
+        """Profesor: enviar a revisión los alumnos listos.
+        Reglas:
+        - Solo estudiantes del profesor
+        - Solo estado_documentacion = completo (o progreso 100)
+        - Solo si revision_estado in (no_enviado, devuelto)
+        """
+        self._ensure_profesor_scope()
+        candidates = self.filtered(lambda r: r.tipo_interno == 'estudiante' and (r.estado_documentacion == 'completo' or (r.progreso_documentacion or 0) >= 100) and r.revision_estado in ('no_enviado', 'devuelto'))
+        if not candidates:
+            raise ValidationError('No hay alumnos aptos para enviar (deben estar Listo y no haber sido ya enviados).')
+        now = fields.Datetime.now()
+        candidates.write({'revision_estado': 'enviado', 'fecha_envio_revision': now})
+        for rec in candidates:
+            rec.message_post(body='Borrador enviado para revisión por el profesor.')
+        return {'type': 'ir.actions.act_window_close'}
+
+    def action_marcar_en_revision(self):
+        self._ensure_admin()
+        targets = self.filtered(lambda r: r.revision_estado in ('enviado',))
+        if not targets:
+            raise ValidationError('Solo puedes marcar "En revisión" los que están Enviados.')
+        targets.write({'revision_estado': 'en_revision'})
+        for rec in targets:
+            rec.message_post(body='El administrador ha marcado el alumno como En revisión.')
+        return {'type': 'ir.actions.act_window_close'}
+
+    def action_marcar_revisado(self):
+        self._ensure_admin()
+        targets = self.filtered(lambda r: r.revision_estado in ('en_revision', 'enviado'))
+        if not targets:
+            raise ValidationError('Solo puedes marcar como Revisado los que están En revisión o Enviados.')
+        now = fields.Datetime.now()
+        targets.write({'revision_estado': 'revisado', 'fecha_revision': now})
+        for rec in targets:
+            rec.message_post(body='Revisión completada por administración.')
+        return {'type': 'ir.actions.act_window_close'}
+
+    def action_devolver_al_profesor(self):
+        self._ensure_admin()
+        targets = self.filtered(lambda r: r.revision_estado in ('enviado', 'en_revision'))
+        if not targets:
+            raise ValidationError('Solo puedes devolver alumnos que están Enviados o En revisión.')
+        now = fields.Datetime.now()
+        targets.write({'revision_estado': 'devuelto', 'fecha_devolucion': now})
+        for rec in targets:
+            rec.message_post(body='Devolución al profesor para corrección.')
+        return {'type': 'ir.actions.act_window_close'}
+
+    def action_contrato_pdf(self):
+        """Abrir el contrato PDF (rellenado vía ruta HTTP)."""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f"/gestion_erasmus/contrato_pdf/{self.id}",
+            'target': 'new',
+        }
+
+    def action_contrato_qweb(self):
+        """Generar el contrato mediante el informe QWeb del módulo.
+
+        Este método es invocado por un botón type="object" en la vista para evitar
+        problemas de resolución de XMLID en botones type="action" editados desde la BD.
+        """
+        self.ensure_one()
+        # Referencia segura al XMLID de la acción de informe y ejecución sobre el registro
+        report = self.env.ref('gestion_erasmus.report_gestion_erasmus_contrato_persona')
+        return report.report_action(self)
+
+    @api.onchange('tipo_interno')
+    def _onchange_tipo_interno_profesor_alumno(self):
+        # Si no es estudiante, limpiar profesor_id
+        for rec in self:
+            if rec.tipo_interno != 'estudiante':
+                rec.profesor_id = False
+            # Si no es profesor, limpiar alumno_ids (solo visual, no borra estudiantes)
+            if rec.tipo_interno != 'profesor':
+                rec.alumno_ids = [(5, 0, 0)]
+
+
+   
     
 
     # Campos comunes de identificación
@@ -130,6 +294,10 @@ class ErasmusPersona(models.Model):
     requiere_explicacion = fields.Boolean(string='Requiere Explicación', compute='_compute_requiere_explicacion', store=True, readonly=True)
     explicacion_especializacion = fields.Text(string='Explicación (especialización)')
 
+    @api.depends('nivel_imparticion')
+    def _compute_requiere_explicacion(self):
+        for rec in self:
+            rec.requiere_explicacion = rec.nivel_imparticion in ('egm', 'egs')
 
     # Idiomas (comunes en estudiante y profesor)
     nivel_ingles = fields.Selection([
@@ -147,100 +315,6 @@ class ErasmusPersona(models.Model):
     pref_pais_2_id = fields.Many2one('erasmus.pais', string='Preferencia país 2')
     pref_pais_3_id = fields.Many2one('erasmus.pais', string='Preferencia país 3')
     show_student_only_paises = fields.Boolean(string='Mostrar países solo estudiante', compute='_compute_show_student_only_paises', store=False)
-
-
-    # Códigos (ahora controlados por catálogo y de solo lectura)
-    codigo_erasmus = fields.Char(string='Código Erasmus', help='Código para identificar al estudiante en el programa Erasmus', compute='_compute_codigos', store=True, readonly=True)
-    programa = fields.Char(string='Programa', compute='_compute_codigos', store=True, readonly=True)
-    codigo_iscedf = fields.Char(string='Código ISCED-F', compute='_compute_codigos', store=True, readonly=True)
-
-    profesor_coordinador_nombre = fields.Char(string='Nombre Profesor Coordinador')
-    profesor_coordinador_apellido1 = fields.Char(string='Primer Apellido Profesor Coordinador')
-    profesor_coordinador_apellido2 = fields.Char(string='Segundo Apellido Profesor Coordinador')
-    profesor_coordinador_email = fields.Char(string='Email Profesor Coordinador')
-    profesor_coordinador_telefono = fields.Char(string='Teléfono Profesor Coordinador')
-
-    # Campo solo Profesor
-    antiguedad_educacion = fields.Integer(string='Años Experiencia Educación')
-
-    # Computed full name
-    nombre_completo = fields.Char(string='Nombre Completo', compute='_compute_nombre_completo', store=True)
-    # Alias estándar para compatibilidad con componentes que esperan un campo 'name'
-    name = fields.Char(string='Nombre', related='nombre_completo', store=True, readonly=True)
-
-    # Sincronización básica con contacto (campos comunes)
-    partner_name = fields.Char(string='Nombre contacto', related='partner_id.name', readonly=True)
-    partner_email = fields.Char(string='Email contacto', related='partner_id.email', readonly=True)
-
-
-    # Flujo de documentacion/revision y relacion profesor-alumno
-    estado_documentacion = fields.Selection([
-        ('pendiente', 'Pendiente'),
-        ('en_proceso', 'En proceso'),
-        ('completo', 'Completo')
-    ], string='Estado de Documentación', default='pendiente', tracking=True)
-
-    # Relación profesor-alumnos
-    profesor_id = fields.Many2one(
-        'erasmus.persona',
-        string='Profesor asignado',
-        domain="[('tipo_interno', '=', 'profesor')]",
-        help='Profesor responsable de este estudiante',
-        tracking=True
-    )
-    alumno_ids = fields.One2many(
-        'erasmus.persona',
-        'profesor_id',
-        string='Alumnos a cargo',
-        help='Estudiantes asignados a este profesor',
-        tracking=True
-    )
-    # Relacionados auxiliares para filtros de seguridad / menús
-    profesor_user_id = fields.Many2one('res.users', string='Usuario Profesor', related='profesor_id.user_id', store=True, index=True, compute_sudo=True)
-    profesor_partner_id = fields.Many2one('res.partner', string='Contacto Profesor', related='profesor_id.partner_id', store=True, index=True, compute_sudo=True)
-
-    # Progreso de documentación (0-100) para tarjetas "Mis Alumnos"
-    # No almacenado: se recalcula al vuelo para reflejar cambios inmediatamente
-    progreso_documentacion = fields.Integer(string='Progreso', compute='_compute_progreso_documentacion', store=False)
-
-    # Flujo de revisión profesor/admin
-    revision_estado = fields.Selection([
-        ('no_enviado', 'No enviado'),
-        ('enviado', 'Enviado'),
-        ('en_revision', 'En revisión'),
-        ('revisado', 'Revisado'),
-        ('devuelto', 'Devuelto'),
-    ], string='Estado de revisión', default='no_enviado', tracking=True, index=True)
-    fecha_envio_revision = fields.Datetime(string='Fecha envío a revisión')
-    fecha_revision = fields.Datetime(string='Fecha revisión')
-    fecha_devolucion = fields.Datetime(string='Fecha devolución')
-    # Columna de Kanban para profesores: Pendiente / En proceso / Listo / Enviados
-    kanban_col_profesor = fields.Selection([
-        ('pendiente', 'Pendiente'),
-        ('en_proceso', 'En proceso'),
-        ('listo', 'Listo'),
-        ('enviados', 'Enviados'),
-    ], compute='_compute_kanban_col_profesor', string='Columna (Profesor)', store=True, index=True)
-
-    # Helpers para tipo y relaciones
-    es_estudiante = fields.Boolean(compute='_compute_tipo_flags')
-    es_profesor = fields.Boolean(compute='_compute_tipo_flags')
-    es_acompaniante = fields.Boolean(compute='_compute_tipo_flags')
-
-    # Movilidades vinculadas
-    movilidad_ids = fields.One2many('erasmus.movilidad', 'persona_id', string='Movilidades')
-
-    _sql_constraints = [
-        ('uniq_nif', 'unique(nif)', 'El NIF debe ser único.'),
-    ]
-
-    # ------------------------------------------------------------------
-    # Logica de negocio y overrides
-    # ------------------------------------------------------------------
-    @api.depends('nivel_imparticion')
-    def _compute_requiere_explicacion(self):
-        for rec in self:
-            rec.requiere_explicacion = rec.nivel_imparticion in ('egm', 'egs')
 
     @api.depends('pref_pais_1_id.selection_scope', 'pref_pais_2_id.selection_scope', 'pref_pais_3_id.selection_scope')
     def _compute_show_student_only_paises(self):
@@ -269,122 +343,34 @@ class ErasmusPersona(models.Model):
             domain = [('id', 'in', allowed)]
             return {'domain': {'pref_pais_1_id': domain, 'pref_pais_2_id': domain, 'pref_pais_3_id': domain}}
 
-    @api.onchange('tipo_interno')
-    def _onchange_tipo_interno_estado_doc(self):
-        for rec in self:
-            if rec.tipo_interno != 'estudiante':
-                rec.estado_documentacion = False
+    # Códigos (ahora controlados por catálogo y de solo lectura)
+    codigo_erasmus = fields.Char(string='Código Erasmus', help='Código para identificar al estudiante en el programa Erasmus', compute='_compute_codigos', store=True, readonly=True)
+    programa = fields.Char(string='Programa', compute='_compute_codigos', store=True, readonly=True)
+    codigo_iscedf = fields.Char(string='Código ISCED-F', compute='_compute_codigos', store=True, readonly=True)
 
-    @api.depends(
-        'tipo_interno', 'revision_estado', 'estado_documentacion',
-        'nombre', 'apellido1', 'apellido2', 'nif', 'email', 'movil', 'centro_formacion',
-        'fecha_nacimiento', 'genero', 'nacionalidad',
-        'street', 'city', 'zip', 'state_id', 'country_id'
-    )
-    def _compute_kanban_col_profesor(self):
-        for rec in self:
-            col = False
-            if rec.tipo_interno == 'estudiante':
-                if rec.revision_estado in ('enviado', 'en_revision'):
-                    col = 'enviados'
-                elif rec.estado_documentacion == 'completo' or (rec.progreso_documentacion or 0) >= 100:
-                    col = 'listo'
-                elif rec.estado_documentacion == 'en_proceso' or (rec.progreso_documentacion or 0) > 0:
-                    col = 'en_proceso'
-                else:
-                    col = 'pendiente'
-            rec.kanban_col_profesor = col
+    profesor_coordinador_nombre = fields.Char(string='Nombre Profesor Coordinador')
+    profesor_coordinador_apellido1 = fields.Char(string='Primer Apellido Profesor Coordinador')
+    profesor_coordinador_apellido2 = fields.Char(string='Segundo Apellido Profesor Coordinador')
+    profesor_coordinador_email = fields.Char(string='Email Profesor Coordinador')
+    profesor_coordinador_telefono = fields.Char(string='Teléfono Profesor Coordinador')
 
-    def _ensure_profesor_scope(self):
-        """Profesores solo sobre sus alumnos."""
-        if self.env.user.has_group('gestion_erasmus.group_erasmus_profesor') and not self.env.user.has_group('gestion_erasmus.group_erasmus_admin'):
-            invalid = self.filtered(lambda r: r.profesor_user_id.id != self.env.user.id)
-            if invalid:
-                raise ValidationError('No puedes operar sobre alumnos que no están a tu cargo.')
+    # Campo solo Profesor
+    antiguedad_educacion = fields.Integer(string='Años Experiencia Educación')
 
-    def _ensure_admin(self):
-        if not self.env.user.has_group('gestion_erasmus.group_erasmus_admin'):
-            raise ValidationError('Acción reservada para administradores.')
+    # Computed full name
+    nombre_completo = fields.Char(string='Nombre Completo', compute='_compute_nombre_completo', store=True)
+    # Alias estándar para compatibilidad con componentes que esperan un campo 'name'
+    name = fields.Char(string='Nombre', related='nombre_completo', store=True, readonly=True)
 
-    def action_enviar_borradores(self):
-        """Profesor: enviar a revisión los alumnos listos.
-        Reglas:
-        - Solo estudiantes del profesor
-        - Solo estado_documentacion = completo (o progreso 100)
-        - Solo si revision_estado in (no_enviado, devuelto)
-        """
-        self._ensure_profesor_scope()
-        candidates = self.filtered(lambda r: r.tipo_interno == 'estudiante' and (r.estado_documentacion == 'completo' or (r.progreso_documentacion or 0) >= 100) and r.revision_estado in ('no_enviado', 'devuelto'))
-        if not candidates:
-            raise ValidationError('No hay alumnos aptos para enviar (deben estar Listo y no haber sido ya enviados).')
-        now = fields.Datetime.now()
-        candidates.write({'revision_estado': 'enviado', 'fecha_envio_revision': now})
-        for rec in candidates:
-            rec.message_post(body='Borrador enviado para revisión por el profesor.')
-        return {'type': 'ir.actions.act_window_close'}
+    # Sincronización básica con contacto (campos comunes)
+    partner_name = fields.Char(string='Nombre contacto', related='partner_id.name', readonly=True)
+    partner_email = fields.Char(string='Email contacto', related='partner_id.email', readonly=True)
 
-    def action_marcar_en_revision(self):
-        self._ensure_admin()
-        targets = self.filtered(lambda r: r.revision_estado in ('enviado',))
-        if not targets:
-            raise ValidationError('Solo puedes marcar "En revisión" los que están Enviados.')
-        targets.write({'revision_estado': 'en_revision'})
-        for rec in targets:
-            rec.message_post(body='El administrador ha marcado el alumno como En revisión.')
-        return {'type': 'ir.actions.act_window_close'}
+    _sql_constraints = [
+        ('uniq_nif', 'unique(nif)', 'El NIF debe ser único.'),
+    ]
 
-    def action_marcar_revisado(self):
-        self._ensure_admin()
-        targets = self.filtered(lambda r: r.revision_estado in ('en_revision', 'enviado'))
-        if not targets:
-            raise ValidationError('Solo puedes marcar como Revisado los que están En revisión o Enviados.')
-        now = fields.Datetime.now()
-        targets.write({'revision_estado': 'revisado', 'fecha_revision': now})
-        for rec in targets:
-            rec.message_post(body='Revisión completada por administración.')
-        return {'type': 'ir.actions.act_window_close'}
-
-    def action_devolver_al_profesor(self):
-        self._ensure_admin()
-        targets = self.filtered(lambda r: r.revision_estado in ('enviado', 'en_revision'))
-        if not targets:
-            raise ValidationError('Solo puedes devolver alumnos que están Enviados o En revisión.')
-        now = fields.Datetime.now()
-        targets.write({'revision_estado': 'devuelto', 'fecha_devolucion': now})
-        for rec in targets:
-            rec.message_post(body='Devolución al profesor para corrección.')
-        return {'type': 'ir.actions.act_window_close'}
-
-    def action_contrato_pdf(self):
-        """Abrir el contrato PDF (rellenado vía ruta HTTP)."""
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_url',
-            'url': f"/gestion_erasmus/contrato_pdf/{self.id}",
-            'target': 'new',
-        }
-
-    def action_contrato_qweb(self):
-        """Generar el contrato mediante el informe QWeb del módulo.
-
-        Este método es invocado por un botón type="object" en la vista para evitar
-        problemas de resolución de XMLID en botones type="action" editados desde la BD.
-        """
-        self.ensure_one()
-        # Referencia segura al XMLID de la acción de informe y ejecución sobre el registro
-        report = self.env.ref('gestion_erasmus.report_gestion_erasmus_contrato_persona')
-        return report.report_action(self)
-
-    @api.onchange('tipo_interno')
-    def _onchange_tipo_interno_profesor_alumno(self):
-        # Si no es estudiante, limpiar profesor_id
-        for rec in self:
-            if rec.tipo_interno != 'estudiante':
-                rec.profesor_id = False
-            # Si no es profesor, limpiar alumno_ids (solo visual, no borra estudiantes)
-            if rec.tipo_interno != 'profesor':
-                rec.alumno_ids = [(5, 0, 0)]
-
+ 
     @api.depends(
         'tipo_interno',
         'nombre', 'apellido1', 'apellido2', 'nif', 'email', 'movil', 'centro_formacion',
@@ -1040,6 +1026,11 @@ class ErasmusPersona(models.Model):
             parts = [p for p in [rec.nombre, rec.apellido1, rec.apellido2] if p]
             rec.nombre_completo = ' '.join(parts)
 
+    # Helpers para saber tipo (posible utilidad futura en dominios / vistas)
+    es_estudiante = fields.Boolean(compute='_compute_tipo_flags')
+    es_profesor = fields.Boolean(compute='_compute_tipo_flags')
+    es_acompaniante = fields.Boolean(compute='_compute_tipo_flags')
+
     def _compute_tipo_flags(self):
         for rec in self:
             rec.es_estudiante = rec.tipo_interno == 'estudiante'
@@ -1055,6 +1046,9 @@ class ErasmusPersona(models.Model):
                 display = f"[{rec.tipo_interno.capitalize()}] {display}"
             result.append((rec.id, display))
         return result
+
+    # Movilidades vinculadas
+    movilidad_ids = fields.One2many('erasmus.movilidad', 'persona_id', string='Movilidades')
 
     @api.onchange('tipo_interno')
     def _onchange_tipo_interno(self):
