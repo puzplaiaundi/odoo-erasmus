@@ -1,0 +1,20 @@
+<odoo>
+  <data>
+    <!-- Search View -->
+    <record id="view_erasmus_persona_search" model="ir.ui.view">
+      <field name="name">erasmus.persona.search</field>
+      <field name="model">erasmus.persona</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="nombre"/>
+          <field name="apellido1"/>
+          <field name="apellido2"/>
+          <field name="tipo_interno"/>
+          <field name="centro_formacion"/>
+          <separator/>
+          <filter name="archived" string="Archivados" domain="[('active', '=', False)]"/>
+        </search>
+      </field>
+    </record>
+  </data>
+</odoo>
