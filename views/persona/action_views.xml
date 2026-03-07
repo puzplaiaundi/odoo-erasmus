@@ -1,0 +1,62 @@
+<odoo>
+  <data>
+    <!-- Acción para que el profesor vea solo sus alumnos -->
+    <record id="action_erasmus_alumnos_kanban" model="ir.actions.act_window">
+      <field name="name">Mis Alumnos</field>
+      <field name="res_model">erasmus.persona</field>
+      <field name="view_mode">kanban,tree,form</field>
+      <field name="view_id" ref="view_erasmus_alumnos_kanban"/>
+      <field name="domain">[("profesor_user_id", "=", uid), ("tipo_interno", "=", "estudiante")]</field>
+      <field name="context">{}</field>
+    </record>
+
+    <!-- Action (default to professional kanban; no drag across groups) -->
+    <record id="action_erasmus_persona" model="ir.actions.act_window">
+      <field name="name">Estudiantes y Profesores</field>
+      <field name="res_model">erasmus.persona</field>
+      <field name="view_mode">kanban,tree,form</field>
+      <field name="view_id" ref="view_erasmus_persona_kanban"/>
+      <field name="search_view_id" ref="view_erasmus_persona_search"/>
+      <field name="context">{}</field>
+      <field name="groups_id" eval="[(6, 0, [ref('gestion_erasmus.group_erasmus_admin')])]"/>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">Crea la primera persona Erasmus</p>
+        <p>Desde aquí gestiona estudiantes, profesores y acompañantes en tarjetas profesionales, agrupadas por tipo.</p>
+      </field>
+    </record>
+
+    <!-- Acción: Personas Archivadas (global) -->
+    <record id="action_erasmus_persona_archived" model="ir.actions.act_window">
+      <field name="name">Archivados</field>
+      <field name="res_model">erasmus.persona</field>
+      <field name="view_mode">kanban,tree,form</field>
+      <field name="view_id" ref="view_erasmus_persona_kanban"/>
+      <field name="search_view_id" ref="view_erasmus_persona_search"/>
+      <field name="domain">[("active", "=", False)]</field>
+      <field name="context">{}</field>
+      <field name="groups_id" eval="[(6, 0, [ref('gestion_erasmus.group_erasmus_admin')])]"/>
+    </record>
+
+    <!-- Acción Admin: ver todos los alumnos con progreso -->
+    <record id="action_erasmus_alumnos_admin_kanban" model="ir.actions.act_window">
+      <field name="name">Alumnos</field>
+      <field name="res_model">erasmus.persona</field>
+      <field name="view_mode">kanban,tree,form</field>
+      <field name="view_id" ref="view_erasmus_alumnos_kanban"/>
+      <field name="domain">[("tipo_interno", "=", "estudiante")]</field>
+      <field name="context">{}</field>
+      <field name="groups_id" eval="[(6, 0, [ref('gestion_erasmus.group_erasmus_admin')])]"/>
+    </record>
+
+    <!-- Acción Admin: Borradores en revisión -->
+    <record id="action_erasmus_borradores_admin" model="ir.actions.act_window">
+      <field name="name">Borradores</field>
+      <field name="res_model">erasmus.persona</field>
+      <field name="view_mode">kanban,tree,form</field>
+      <field name="view_id" ref="view_erasmus_borradores_kanban"/>
+      <field name="domain">[("tipo_interno", "=", "estudiante"), ("revision_estado", "in", ["enviado", "en_revision", "revisado"])]</field>
+      <field name="context">{}</field>
+      <field name="groups_id" eval="[(6, 0, [ref('gestion_erasmus.group_erasmus_admin')])]"/>
+    </record>
+  </data>
+</odoo>

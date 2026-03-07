@@ -1,0 +1,32 @@
+<odoo>
+  <data>
+    <!-- Tree View (Profesional) -->
+    <record id="view_erasmus_persona_tree" model="ir.ui.view">
+      <field name="name">erasmus.persona.tree</field>
+      <field name="model">erasmus.persona</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="image_1920" widget="image" class="o_avatar" optional="hide"/>
+          <field name="nombre" optional="show"/>
+          <field name="apellido1" optional="show"/>
+          <field name="apellido2" optional="hide"/>
+          <field name="tipo_interno" optional="show"/>
+          <field name="centro_formacion" optional="show"/>
+          <field name="email" optional="show"/>
+          <field name="movil" optional="hide"/>
+          <field name="nif" optional="hide"/>
+          <field name="profesor_id" optional="hide"/>
+          <field name="estado_documentacion" optional="hide"/>
+          <field name="progreso_documentacion" optional="hide" widget="progressbar" options="{'max_value': 100}"/>
+          <field name="nivel_imparticion" optional="hide"/>
+          <field name="familia_profesional" optional="hide"/>
+          <field name="ciclo_formativo" optional="hide"/>
+          <field name="city" optional="hide"/>
+          <field name="zip" optional="hide"/>
+          <field name="state_id" optional="hide"/>
+          <field name="country_id" optional="hide"/>
+        </tree>
+      </field>
+    </record>
+  </data>
+</odoo>

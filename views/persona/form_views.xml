@@ -1,0 +1,213 @@
+<odoo>
+  <data>
+    <!-- Form View -->
+    <record id="view_erasmus_persona_form" model="ir.ui.view">
+      <field name="name">erasmus.persona.form</field>
+      <field name="model">erasmus.persona</field>
+      <field name="arch" type="xml">
+  <form string="Persona Erasmus">
+    <header>
+      <button name="toggle_active" type="object" string="Archivar" class="oe_highlight"
+        invisible="active == False"/>
+      <button name="toggle_active" type="object" string="Restaurar" class="oe_highlight"
+        invisible="active == True"/>
+      <button type="object" name="action_create_or_link_partner" class="btn btn-secondary o_form_button_secondary">
+        <i class="fa fa-address-book me-1"/>
+        <span>Ver contacto</span>
+      </button>
+    <!-- Botón para crear alias manualmente (invisible si alias_id ya está asignado) -->
+    <button type="object" name="create_person_alias" string="Generar alias" class="btn btn-secondary o_form_button_secondary" invisible="alias_id"/>
+  <!-- Botón para generar PDF del convenio (QWeb) -->
+  <!-- Eliminado: el botón 'Generar PDF 1A' se quita porque se usa alnas_docx para generar DOCX/PDF -->
+    </header>
+          <sheet>
+            <div class="ge-archived-sheet">
+              <div class="ge-archived-overlay ge-archived-overlay--form" invisible="active">
+                <img src="/gestion_erasmus/static/src/img/archived_overlay2.png" alt="Archivado"/>
+              </div>
+            <div class="oe_button_box" name="button_box">
+              <!-- Reservado para botones de estadísticas adicionales -->
+            </div>
+            <!-- Campo oculto para flags de visibilidad -->
+            <field name="show_nacionalidad" invisible="1"/>
+            <field name="show_antiguedad" invisible="1"/>
+            <field name="show_idiomas" invisible="1"/>
+            <field name="show_profesor_coord" invisible="1"/>
+            <field name="active" invisible="1"/>
+            <field name="partner_id" invisible="1"/>
+            <!-- Campo alias_id oculto para soportar invisible en el botón 'Generar alias' (Odoo 17 requiere que el campo exista en la vista) -->
+            <field name="alias_id" invisible="1"/>
+            <group>
+              <group>
+                <field name="tipo_interno" widget="radio" options="{'horizontal': true}"/>
+                <field name="nombre"/>
+                <field name="apellido1"/>
+                <field name="apellido2"/>
+                <field name="nif"/>
+                <field name="email"/>
+                <field name="movil"/>
+                <field name="centro_formacion"/>
+              </group>
+              <group>
+                <field name="image_1920" widget="image" class="oe_avatar"/>
+                <field name="fecha_nacimiento"/>
+                <field name="genero"/>
+                <field name="nacionalidad" invisible="not show_nacionalidad"/>
+              </group>
+            </group>
+            <notebook>
+              <page string="Dirección">
+                <group>
+                  <group>
+                    <field name="street" widget="direccion_autocomplete" placeholder="Escribe una dirección"/>
+                    <field name="street2"/>
+                    <field name="city"/>
+                  </group>
+                  <group>
+                    <field name="zip"/>
+                    <field name="state_id"/>
+                    <field name="country_id"/>
+                    <field name="portal"/>
+                    <field name="puerta"/>
+                  </group>
+                </group>
+              </page>
+              <!-- Página específica para Estudiante -->
+              <page string="Estudiante" name="ge_estudiante" class="ge-page-estudiante" invisible="tipo_interno != 'estudiante'">
+                <group>
+                  <group>
+                    <field name="profesor_id" domain="[('tipo_interno','=','profesor')]"/>
+                    <field name="nivel_imparticion"/>
+                    <field name="familia_profesional" readonly="requiere_explicacion"/>
+                    <field name="ciclo_formativo_id" string="Ciclo Formativo" domain="[('familia_profesional','=',familia_profesional), '|', ('nivel','=',False), ('nivel','=',nivel_imparticion)]" readonly="requiere_explicacion"/>
+                    <field name="ciclo_formativo" invisible="1"/>
+                    <field name="requiere_explicacion" readonly="1"/>
+                    <field name="explicacion_especializacion" invisible="not requiere_explicacion"/>
+                    <separator string="Códigos"/>
+                    <field name="programa" readonly="1"/>
+                    <field name="codigo_erasmus" readonly="1"/>
+                    <field name="codigo_iscedf" readonly="1"/>       
+                    <separator string="Preferencias País"/>
+                    <field name="pref_pais_1_id"/>
+                    <field name="pref_pais_2_id"/>
+                    <field name="pref_pais_3_id"/>
+                    <field name="show_student_only_paises" invisible="1"/>
+                  </group>
+                  <group string="Idiomas">
+                    <field name="nivel_ingles"/>
+                    <field name="nivel_frances"/>
+                    <field name="nivel_aleman"/>
+                  </group>
+                </group>
+                <group string="Profesor Coordinador">
+                  <group>
+                    <field name="profesor_coordinador_nombre"/>
+                    <field name="profesor_coordinador_apellido1"/>
+                    <field name="profesor_coordinador_apellido2"/>
+                  </group>
+                  <group>
+                    <field name="profesor_coordinador_email"/>
+                    <field name="profesor_coordinador_telefono"/>
+                  </group>
+                </group>
+              </page>
+
+              <!-- Página específica para Profesor -->
+              <page string="Profesor" name="ge_profesor" class="ge-page-profesor" invisible="tipo_interno != 'profesor'">
+                <group>
+                  <group>
+                    <field name="nivel_imparticion"/>
+                    <field name="familia_profesional" readonly="requiere_explicacion"/>
+                    <field name="ciclo_formativo_id" string="Ciclo Formativo" domain="[('familia_profesional','=',familia_profesional), '|', ('nivel','=',False), ('nivel','=',nivel_imparticion)]" readonly="requiere_explicacion"/>
+                    <field name="ciclo_formativo" invisible="1"/>
+                    <field name="requiere_explicacion" readonly="1"/>
+                    <field name="explicacion_especializacion" invisible="not requiere_explicacion"/>
+                    <field name="antiguedad_educacion"/>
+                    <separator string="Códigos"/>
+                    <field name="programa" readonly="1"/>
+                    <field name="codigo_erasmus" readonly="1"/>
+                    <field name="codigo_iscedf" readonly="1"/>
+                  </group>
+                </group>
+              </page>
+
+              <!-- Página específica para Acompañante (igual que Profesor) -->
+              <page string="Acompañante" name="ge_acompaniante" class="ge-page-acompaniante" invisible="tipo_interno != 'acompaniante'">
+                <group>
+                  <group>
+                    <field name="nivel_imparticion"/>
+                    <field name="familia_profesional" readonly="requiere_explicacion"/>
+                    <field name="ciclo_formativo_id" string="Ciclo Formativo" domain="[('familia_profesional','=',familia_profesional), '|', ('nivel','=',False), ('nivel','=',nivel_imparticion)]" readonly="requiere_explicacion"/>
+                    <field name="ciclo_formativo" invisible="1"/>
+                    <field name="requiere_explicacion" readonly="1"/>
+                    <field name="explicacion_especializacion" invisible="not requiere_explicacion"/>
+                    <field name="antiguedad_educacion"/>
+                    <separator string="Códigos"/>
+                    <field name="programa" readonly="1"/>
+                    <field name="codigo_erasmus" readonly="1"/>
+                    <field name="codigo_iscedf" readonly="1"/>
+                  </group>
+                </group>
+              </page>
+              <page string="Movilidades">
+                <!-- Estudiante: abre formulario específico -->
+      <field name="movilidad_ids" invisible="tipo_interno != 'estudiante'"
+        context="{'default_persona_id': id, 'default_tipo_interno': tipo_interno, 'form_view_ref': 'gestion_erasmus.view_erasmus_movilidad_form_estudiante'}">
+                  <tree>
+                    <field name="id" readonly="1"/>
+                    <field name="curso_academico"/>
+                    <field name="cuenta_bancaria"/>
+                    <field name="fecha_ida"/>
+                    <field name="fecha_vuelta"/>
+                    <field name="duracion_actividad_dias"/>
+                    <field name="tipo_movilidad"/>
+                    <field name="estado_datos"/>
+                  </tree>
+                </field>
+                <!-- Profesor: abre formulario específico -->
+      <field name="movilidad_ids" invisible="tipo_interno != 'profesor'"
+        context="{'default_persona_id': id, 'default_tipo_interno': tipo_interno, 'form_view_ref': 'gestion_erasmus.view_erasmus_movilidad_form_profesor'}">
+                  <tree>
+                    <field name="id" readonly="1"/>
+                    <field name="curso_academico"/>
+                    <field name="cuenta_bancaria"/>
+                    <field name="direccion_empresa"/>
+                    <field name="fecha_ida"/>
+                    <field name="fecha_vuelta"/>
+                    <field name="duracion_actividad_dias"/>
+                    <field name="que_dias"/>
+                    <field name="tipo_movilidad"/>
+                    <field name="estado_datos"/>
+                  </tree>
+                </field>
+                <!-- Acompañante: abre formulario específico -->
+      <field name="movilidad_ids" invisible="tipo_interno != 'acompaniante'"
+        context="{'default_persona_id': id, 'default_tipo_interno': tipo_interno, 'form_view_ref': 'gestion_erasmus.view_erasmus_movilidad_form_acompaniante'}">
+                  <tree>
+                    <field name="id" readonly="1"/>
+                    <field name="curso_academico"/>
+                    <field name="cuenta_bancaria"/>
+                    <field name="direccion_empresa"/>
+                    <field name="fecha_ida"/>
+                    <field name="fecha_vuelta"/>
+                    <field name="duracion_actividad_dias"/>
+                    <field name="que_dias"/>
+                    <field name="tipo_movilidad"/>
+                    <field name="estado_datos"/>
+                  </tree>
+                </field>
+              </page>
+            </notebook>
+            </div>
+          </sheet>
+          <!-- Chatter con contenedor clásico para asegurar render en todos los setups -->
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="activity_ids" widget="mail_activity"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+  </data>
+</odoo>
