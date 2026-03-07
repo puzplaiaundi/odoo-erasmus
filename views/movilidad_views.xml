@@ -1,0 +1,158 @@
+<odoo>
+  <data>
+    <!-- Formulario Movilidad: Estudiante -->
+    <record id="view_erasmus_movilidad_form_estudiante" model="ir.ui.view">
+      <field name="name">erasmus.movilidad.form.estudiante</field>
+      <field name="model">erasmus.movilidad</field>
+      <field name="arch" type="xml">
+        <form string="Movilidad Estudiante">
+          <sheet>
+            <group string="Datos principales">
+              <group>
+                <field name="persona_id"/>
+                <field name="tipo_interno" readonly="1"/>
+                <field name="curso_academico"/>
+                <field name="cuenta_bancaria"/>
+                <field name="num_adjuntos_dni"/>
+                <field name="dni" filename="dni_filename"/>
+    <field name="dni2" filename="dni2_filename" invisible="num_adjuntos_dni != '2'"/>
+                <field name="cert_titularidad_bancaria" filename="cert_titularidad_bancaria_filename"/>
+                <field name="tipo_movilidad"/>
+              </group>
+            </group>
+            <group string="Datos estudiantes">
+              <group>
+                <!-- helpers invisibles para dominios -->
+                <field name="allowed_country_ids" invisible="1"/>
+                <field name="allowed_pais_ids" invisible="1"/>
+                <!-- Campos UI (comodel erasmus.pais) para que 'Search More' abra la tabla de países personalizada -->
+                <field name="ui_pref_pais_1_id" domain="[('id','in', allowed_pais_ids)]" context="{'erasmus_pais_label': True}"/>
+                <field name="ui_pref_pais_2_id" domain="[('id','in', allowed_pais_ids)]" context="{'erasmus_pais_label': True}"/>
+                <field name="ui_pref_pais_3_id" domain="[('id','in', allowed_pais_ids)]" context="{'erasmus_pais_label': True}"/>
+                <!-- Ocultamos los campos reales (res.country) para no confundir al usuario -->
+                <field name="pref_pais_1_id" invisible="1"/>
+                <field name="pref_pais_2_id" invisible="1"/>
+                <field name="pref_pais_3_id" invisible="1"/>
+                <field name="informacion_extra_est"/>
+                <field name="alumno_menos_oportunidad"/>
+                <field name="motivo_menos_oportunidad"/>
+                <field name="contacto_origen"/>
+                <field name="parentesco"/>
+                <field name="telefono_contacto"/>
+                <field name="recien_titulado"/>
+                <field name="curriculum_ingles" filename="curriculum_ingles_filename"/>
+                <field name="carta_presentacion_ingles" filename="carta_presentacion_ingles_filename"/>
+                <field name="certificado_1" filename="certificado_1_filename"/>
+                <field name="certificado_2" filename="certificado_2_filename"/>
+                <field name="certificado_3" filename="certificado_3_filename"/>
+              </group>
+            </group>
+            <group>
+              <group>
+                <field name="estado_datos"/>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Formulario Movilidad: Profesor -->
+  <record id="view_erasmus_movilidad_form_profesor" model="ir.ui.view">
+      <field name="name">erasmus.movilidad.form.profesor</field>
+      <field name="model">erasmus.movilidad</field>
+      <field name="arch" type="xml">
+        <form string="Movilidad Profesor">
+          <sheet>
+            <group string="Datos principales">
+              <group>
+                <field name="persona_id"/>
+                <field name="tipo_interno" readonly="1"/>
+                <field name="curso_academico"/>
+                <field name="cuenta_bancaria"/>
+                <field name="num_adjuntos_dni"/>
+                <field name="dni" filename="dni_filename"/>
+                <field name="dni2" filename="dni2_filename" invisible="num_adjuntos_dni != '2'"/>
+                <field name="cert_titularidad_bancaria" filename="cert_titularidad_bancaria_filename"/>
+                <field name="tipo_movilidad"/>
+                <field name="es_formacion"/>
+              </group>
+            </group>
+            <group string="Datos empresa">
+              <group>
+                <field name="fecha_ida"/>
+                <field name="fecha_vuelta"/>
+                <field name="duracion_actividad_dias"/>
+                <field name="que_dias"/>
+                <field name="pais_destino"/>
+                <field name="nombre_empresa"/>
+                <field name="direccion_empresa"/>
+                <field name="ciudad_empresa"/>
+                <field name="persona_contacto_empresa"/>
+                <field name="cargo_empresa"/>
+                <field name="email_empresa"/>
+                <field name="telefono_empresa"/>
+              </group>
+            </group>
+            <group string="Datos profesor">
+              <group>
+                <field name="obj_generales"/>
+                <field name="actividades_realizar"/>
+                <field name="resultados_impacto"/>
+                <field name="informacion_extra_prof"/>
+                <field name="digital_skill"/>
+                <field name="medio_transporte"/>
+              </group>
+            </group>
+            <group>
+              <group>
+                <field name="estado_datos"/>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Formulario Movilidad: Acompañante (igual que Profesor) -->
+  <record id="view_erasmus_movilidad_form_acompaniante" model="ir.ui.view">
+      <field name="name">erasmus.movilidad.form.acompaniante</field>
+      <field name="model">erasmus.movilidad</field>
+      <field name="arch" type="xml">
+        <form string="Movilidad Acompañante">
+          <sheet>
+            <group string="Datos principales">
+              <group>
+                <field name="persona_id"/>
+                <field name="tipo_interno" readonly="1"/>
+                <field name="curso_academico"/>
+                <field name="cuenta_bancaria"/>
+                <field name="num_adjuntos_dni"/>
+                <field name="dni" filename="dni_filename"/>
+                <field name="dni2" filename="dni2_filename" invisible="num_adjuntos_dni != '2'"/>
+                <field name="cert_titularidad_bancaria" filename="cert_titularidad_bancaria_filename"/>
+                <field name="tipo_movilidad"/>
+                <field name="es_formacion"/>
+              </group>
+            </group>
+            <group string="Datos profesor">
+              <group>
+                <field name="obj_generales"/>
+                <field name="actividades_realizar"/>
+                <field name="resultados_impacto"/>
+                <field name="informacion_extra_prof"/>
+                <field name="digital_skill"/>
+                <field name="medio_transporte"/>
+              </group>
+            </group>
+            <group>
+              <group>
+                <field name="estado_datos"/>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+  </data>
+</odoo>

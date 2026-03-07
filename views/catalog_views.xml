@@ -1,0 +1,81 @@
+<odoo>
+  <data>
+    <!-- Códigos: vistas y menú -->
+    <record id="view_erasmus_codigo_tree" model="ir.ui.view">
+      <field name="name">erasmus.codigo.tree</field>
+      <field name="model">erasmus.codigo</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="active"/>
+          <field name="key"/>
+          <field name="ciclo_id"/>
+          <field name="valor"/>
+          <field name="note"/>
+        </tree>
+      </field>
+    </record>
+    <record id="view_erasmus_codigo_form" model="ir.ui.view">
+      <field name="name">erasmus.codigo.form</field>
+      <field name="model">erasmus.codigo</field>
+      <field name="arch" type="xml">
+        <form string="Código Catálogo">
+          <sheet>
+            <group>
+              <field name="active"/>
+              <field name="key"/>
+              <field name="ciclo_id"/>
+              <field name="valor"/>
+              <field name="note"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+    <record id="action_erasmus_codigo" model="ir.actions.act_window">
+      <field name="name">Códigos</field>
+      <field name="res_model">erasmus.codigo</field>
+      <field name="view_mode">tree,form</field>
+      <field name="groups_id" eval="[(6, 0, [ref('gestion_erasmus.group_erasmus_admin')])]"/>
+    </record>
+
+    <!-- Países Erasmus: vistas -->
+    <record id="view_erasmus_pais_tree" model="ir.ui.view">
+      <field name="name">erasmus.pais.tree</field>
+      <field name="model">erasmus.pais</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name_eu" string="Nombre es Euskera"/>
+          <field name="name_es" string="Nombre en Castellano"/>
+          <field name="country_id" string="País de Odoo"/>
+          <field name="selection_scope" string="Lo pueden seleccionar"/>
+          <field name="active"/>
+        </tree>
+      </field>
+    </record>
+    <record id="view_erasmus_pais_form" model="ir.ui.view">
+      <field name="name">erasmus.pais.form</field>
+      <field name="model">erasmus.pais</field>
+      <field name="arch" type="xml">
+        <form string="País Erasmus">
+          <sheet>
+            <group>
+              <group>
+                <field name="name_es"/>
+                <field name="name_eu"/>
+                <field name="country_id"/>
+                <field name="selection_scope"/>
+                <field name="active"/>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+    <record id="action_erasmus_pais" model="ir.actions.act_window">
+      <field name="name">Países</field>
+      <field name="res_model">erasmus.pais</field>
+      <field name="view_mode">tree,form</field>
+      <field name="groups_id" eval="[(6, 0, [ref('gestion_erasmus.group_erasmus_admin')])]"/>
+    </record>
+  </data>
+</odoo>
