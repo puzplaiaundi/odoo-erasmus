@@ -18,7 +18,7 @@ Módulo para gestionar personas vinculadas a Erasmus (Estudiantes, Profesores y 
     'depends': ['base', 'web', 'mail', 'portal'],
 
     'data': [
-        'security/groups.xml',
+        'security/security.xml',
         'views/views.xml',
         'views/templates.xml',
         'data/ciclos.xml',

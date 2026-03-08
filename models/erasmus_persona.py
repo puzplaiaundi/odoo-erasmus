@@ -100,7 +100,7 @@ class ErasmusPersona(models.Model):
     # --- Acciones profesor/admin ---
     def _ensure_profesor_scope(self):
         """Profesores solo sobre sus alumnos."""
-        if self.env.user.has_group('gestion_erasmus.group_erasmus_profesor') and not self.env.user.has_group('gestion_erasmus.group_erasmus_admin'):
+        if self.env.user.has_group('gestion_erasmus.group_erasmus_teacher') and not self.env.user.has_group('gestion_erasmus.group_erasmus_admin'):
             invalid = self.filtered(lambda r: r.profesor_user_id.id != self.env.user.id)
             if invalid:
                 raise ValidationError('No puedes operar sobre alumnos que no están a tu cargo.')
@@ -522,13 +522,13 @@ class ErasmusPersona(models.Model):
         """Return the target groups/share/notification profile for a given tipo."""
         group_portal = self.env.ref('base.group_portal', raise_if_not_found=False)
         group_user = self.env.ref('base.group_user', raise_if_not_found=False)
-        group_profesor = self.env.ref('gestion_erasmus.group_erasmus_profesor', raise_if_not_found=False)
+        group_teacher = self.env.ref('gestion_erasmus.group_erasmus_teacher', raise_if_not_found=False)
 
         portal_id = group_portal.id if group_portal else False
         user_id = group_user.id if group_user else False
-        profesor_id = group_profesor.id if group_profesor else False
+        teacher_id = group_teacher.id if group_teacher else False
 
-        managed_ids = {gid for gid in [portal_id, user_id, profesor_id] if gid}
+        managed_ids = {gid for gid in [portal_id, user_id, teacher_id] if gid}
         target_ids = set()
         share = False
         notification = 'inbox'
@@ -541,8 +541,8 @@ class ErasmusPersona(models.Model):
         elif tipo == 'profesor':
             if user_id:
                 target_ids.add(user_id)
-            if profesor_id:
-                target_ids.add(profesor_id)
+            if teacher_id:
+                target_ids.add(teacher_id)
         elif tipo in ('acompaniante', 'no_asignado'):
             if user_id:
                 target_ids.add(user_id)

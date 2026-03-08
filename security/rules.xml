@@ -20,11 +20,19 @@
     <record id="rule_profesor_persona_students" model="ir.rule">
       <field name="name">Persona Erasmus: Profesor ve sus alumnos</field>
       <field name="model_id" ref="model_erasmus_persona"/>
-      <field name="groups" eval="[(4, ref('gestion_erasmus.group_erasmus_profesor'))]"/>
+      <field name="groups" eval="[(4, ref('gestion_erasmus.group_erasmus_teacher'))]"/>
       <field name="domain_force">['|',
         '&amp;', ('tipo_interno', '=', 'estudiante'), ('profesor_user_id', '=', user.id),
         '&amp;', ('tipo_interno', '=', 'profesor'), ('user_id', '=', user.id)
       ]</field>
+    </record>
+
+    <!-- Coordinador: acceso total sin filtro -->
+    <record id="rule_coordinator_persona_all" model="ir.rule">
+      <field name="name">Persona Erasmus: Coordinador full access</field>
+      <field name="model_id" ref="model_erasmus_persona"/>
+      <field name="groups" eval="[(4, ref('gestion_erasmus.group_erasmus_coordinator'))]"/>
+      <field name="domain_force">[(1,'=',1)]</field>
     </record>
 
     <!-- Admin: acceso total sin filtro -->
