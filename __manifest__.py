@@ -19,7 +19,7 @@ Módulo para gestionar personas vinculadas a Erasmus (Estudiantes, Profesores y 
     'depends': ['base', 'web', 'mail', 'portal'],
 
     'data': [
-        'security/groups.xml',
+        'security/security.xml',
         'security/rules.xml',
         'security/ir.model.access.csv',
         'data/ciclos.xml',
@@ -38,7 +38,6 @@ Módulo para gestionar personas vinculadas a Erasmus (Estudiantes, Profesores y 
         'views/partner/form_inherit_views.xml',
         'views/menu/menuitem_views.xml',
         'views/templates.xml',
-        'views/users.xml',
     ],
     # App icon/screenshots for Apps view and App Store
     # Preferred: static/description/icon.png (512x512)

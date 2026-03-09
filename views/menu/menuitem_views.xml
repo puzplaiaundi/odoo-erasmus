@@ -10,8 +10,8 @@
   <!-- Eliminado menú 'Alumnos' para evitar duplicado; solo se expone 'Borradores' a admin -->
   <menuitem id="menu_gestion_erasmus_borradores_admin" name="Borradores" parent="menu_gestion_erasmus_root" action="action_erasmus_borradores_admin" sequence="15" groups="gestion_erasmus.group_erasmus_admin"/>
   <!-- Menú raíz para profesores -->
-  <menuitem id="menu_gestion_erasmus_prof_root" name="Erasmus" groups="gestion_erasmus.group_erasmus_profesor" sequence="10"/>
+  <menuitem id="menu_gestion_erasmus_prof_root" name="Erasmus" groups="gestion_erasmus.group_erasmus_teacher" sequence="10"/>
   <!-- Menú para profesores: Mis Alumnos (bajo root de profesor) -->
-  <menuitem id="menu_erasmus_alumnos_profesor" name="Mis Alumnos" parent="menu_gestion_erasmus_prof_root" action="action_erasmus_alumnos_kanban" sequence="30" groups="gestion_erasmus.group_erasmus_profesor"/>
+  <menuitem id="menu_erasmus_alumnos_profesor" name="Mis Alumnos" parent="menu_gestion_erasmus_prof_root" action="action_erasmus_alumnos_kanban" sequence="30" groups="gestion_erasmus.group_erasmus_teacher"/>
   </data>
 </odoo>
