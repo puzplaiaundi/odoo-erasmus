@@ -13,7 +13,7 @@ Módulo para gestionar personas vinculadas a Erasmus (Estudiantes, Profesores y 
 
     'category': 'Uncategorized',
         # Bump de versión para forzar que Odoo detecte actualización y recargue vistas/plantillas
-    'version': '17.0.1.0.18',
+    'version': '17.0.1.0.19',
     'license': 'LGPL-3',
 
     'depends': ['base', 'web', 'mail', 'portal'],

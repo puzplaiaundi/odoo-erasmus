@@ -6,7 +6,9 @@
       <field name="res_model">erasmus.persona</field>
       <field name="view_mode">kanban,tree,form</field>
       <field name="view_id" ref="view_erasmus_alumnos_kanban"/>
-      <field name="domain">[("profesor_user_id", "=", uid), ("tipo_interno", "=", "estudiante")]</field>
+      <!-- Filtrar solo por estudiantes y delegar el alcance de "mis alumnos" a ir.rule.
+           Evita falsos vacíos cuando el vínculo del profesor está por partner y no por user_id. -->
+      <field name="domain">[("tipo_interno", "=", "estudiante")]</field>
       <field name="context">{}</field>
     </record>
 
