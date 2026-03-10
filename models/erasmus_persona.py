@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 import logging
@@ -7,7 +7,7 @@ import unicodedata
 
 class ErasmusPersona(models.Model):
     _name = 'erasmus.persona'
-    _description = 'Persona Erasmus (Estudiante / Profesor / AcompaÃ±ante)'
+    _description = 'Persona Erasmus (Estudiante / Profesor / Acompañante)'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'nombre_completo'
     _order = 'apellido1, apellido2, nombre'
@@ -21,21 +21,21 @@ class ErasmusPersona(models.Model):
         ('no_asignado', 'No asignado'),
         ('estudiante', 'Estudiante'),
         ('profesor', 'Profesor'),
-        ('acompaniante', 'AcompaÃ±ante')
+        ('acompaniante', 'Acompañante')
     ], string='Tipo', required=True, default='estudiante', index=True)
 
     estado_documentacion = fields.Selection([
         ('pendiente', 'Pendiente'),
         ('en_proceso', 'En proceso'),
         ('completo', 'Completo')
-    ], string='Estado de DocumentaciÃ³n', default='pendiente', tracking=True)
+    ], string='Estado de Documentación', default='pendiente', tracking=True)
 
     @api.onchange('tipo_interno')
     def _onchange_tipo_interno_estado_doc(self):
         for rec in self:
             if rec.tipo_interno != 'estudiante':
                 rec.estado_documentacion = False
-    # RelaciÃ³n profesor-alumnos
+    # Relación profesor-alumnos
     profesor_id = fields.Many2one(
         'erasmus.persona',
         string='Profesor asignado',
@@ -50,25 +50,25 @@ class ErasmusPersona(models.Model):
         help='Estudiantes asignados a este profesor',
         tracking=True
     )
-    # Relacionados auxiliares para filtros de seguridad / menÃºs
+    # Relacionados auxiliares para filtros de seguridad / meníºs
     profesor_user_id = fields.Many2one('res.users', string='Usuario Profesor', related='profesor_id.user_id', store=True, index=True, compute_sudo=True)
     profesor_partner_id = fields.Many2one('res.partner', string='Contacto Profesor', related='profesor_id.partner_id', store=True, index=True, compute_sudo=True)
 
-    # Progreso de documentaciÃ³n (0-100) para tarjetas "Mis Alumnos"
+    # Progreso de documentación (0-100) para tarjetas "Mis Alumnos"
     # No almacenado: se recalcula al vuelo para reflejar cambios inmediatamente
     progreso_documentacion = fields.Integer(string='Progreso', compute='_compute_progreso_documentacion', store=False)
 
-    # Flujo de revisiÃ³n profesor/admin
+    # Flujo de revisión profesor/admin
     revision_estado = fields.Selection([
         ('no_enviado', 'No enviado'),
         ('enviado', 'Enviado'),
-        ('en_revision', 'En revisiÃ³n'),
+        ('en_revision', 'En revisión'),
         ('revisado', 'Revisado'),
         ('devuelto', 'Devuelto'),
-    ], string='Estado de revisiÃ³n', default='no_enviado', tracking=True, index=True)
-    fecha_envio_revision = fields.Datetime(string='Fecha envÃ­o a revisiÃ³n')
-    fecha_revision = fields.Datetime(string='Fecha revisiÃ³n')
-    fecha_devolucion = fields.Datetime(string='Fecha devoluciÃ³n')
+    ], string='Estado de revisión', default='no_enviado', tracking=True, index=True)
+    fecha_envio_revision = fields.Datetime(string='Fecha envío a revisión')
+    fecha_revision = fields.Datetime(string='Fecha revisión')
+    fecha_devolucion = fields.Datetime(string='Fecha devolución')
     # Columna de Kanban para profesores: Pendiente / En proceso / Listo / Enviados
     kanban_col_profesor = fields.Selection([
         ('pendiente', 'Pendiente'),
@@ -109,14 +109,14 @@ class ErasmusPersona(models.Model):
                 )
             )
             if invalid:
-                raise ValidationError('No puedes operar sobre alumnos que no estÃ¡n a tu cargo.')
+                raise ValidationError('No puedes operar sobre alumnos que no están a tu cargo.')
 
     def _ensure_admin(self):
         if not self.env.user.has_group('gestion_erasmus.group_erasmus_admin'):
-            raise ValidationError('AcciÃ³n reservada para administradores.')
+            raise ValidationError('Acción reservada para administradores.')
 
     def action_enviar_borradores(self):
-        """Profesor: enviar a revisiÃ³n los alumnos listos.
+        """Profesor: enviar a revisión los alumnos listos.
         Reglas:
         - Solo estudiantes del profesor
         - Solo estado_documentacion = completo (o progreso 100)
@@ -129,43 +129,43 @@ class ErasmusPersona(models.Model):
         now = fields.Datetime.now()
         candidates.write({'revision_estado': 'enviado', 'fecha_envio_revision': now})
         for rec in candidates:
-            rec.message_post(body='Borrador enviado para revisiÃ³n por el profesor.')
+            rec.message_post(body='Borrador enviado para revisión por el profesor.')
         return {'type': 'ir.actions.act_window_close'}
 
     def action_marcar_en_revision(self):
         self._ensure_admin()
         targets = self.filtered(lambda r: r.revision_estado in ('enviado',))
         if not targets:
-            raise ValidationError('Solo puedes marcar "En revisiÃ³n" los que estÃ¡n Enviados.')
+            raise ValidationError('Solo puedes marcar "En revisión" los que están Enviados.')
         targets.write({'revision_estado': 'en_revision'})
         for rec in targets:
-            rec.message_post(body='El administrador ha marcado el alumno como En revisiÃ³n.')
+            rec.message_post(body='El administrador ha marcado el alumno como En revisión.')
         return {'type': 'ir.actions.act_window_close'}
 
     def action_marcar_revisado(self):
         self._ensure_admin()
         targets = self.filtered(lambda r: r.revision_estado in ('en_revision', 'enviado'))
         if not targets:
-            raise ValidationError('Solo puedes marcar como Revisado los que estÃ¡n En revisiÃ³n o Enviados.')
+            raise ValidationError('Solo puedes marcar como Revisado los que están En revisión o Enviados.')
         now = fields.Datetime.now()
         targets.write({'revision_estado': 'revisado', 'fecha_revision': now})
         for rec in targets:
-            rec.message_post(body='RevisiÃ³n completada por administraciÃ³n.')
+            rec.message_post(body='Revisión completada por administración.')
         return {'type': 'ir.actions.act_window_close'}
 
     def action_devolver_al_profesor(self):
         self._ensure_admin()
         targets = self.filtered(lambda r: r.revision_estado in ('enviado', 'en_revision'))
         if not targets:
-            raise ValidationError('Solo puedes devolver alumnos que estÃ¡n Enviados o En revisiÃ³n.')
+            raise ValidationError('Solo puedes devolver alumnos que están Enviados o En revisión.')
         now = fields.Datetime.now()
         targets.write({'revision_estado': 'devuelto', 'fecha_devolucion': now})
         for rec in targets:
-            rec.message_post(body='DevoluciÃ³n al profesor para correcciÃ³n.')
+            rec.message_post(body='Devolución al profesor para corrección.')
         return {'type': 'ir.actions.act_window_close'}
 
     def action_contrato_pdf(self):
-        """Abrir el contrato PDF (rellenado vÃ­a ruta HTTP)."""
+        """Abrir el contrato PDF (rellenado ví­a ruta HTTP)."""
         self.ensure_one()
         return {
             'type': 'ir.actions.act_url',
@@ -174,13 +174,13 @@ class ErasmusPersona(models.Model):
         }
 
     def action_contrato_qweb(self):
-        """Generar el contrato mediante el informe QWeb del mÃ³dulo.
+        """Generar el contrato mediante el informe QWeb del módulo.
 
-        Este mÃ©todo es invocado por un botÃ³n type="object" en la vista para evitar
-        problemas de resoluciÃ³n de XMLID en botones type="action" editados desde la BD.
+        Este método es invocado por un botón type="object" en la vista para evitar
+        problemas de resolución de XMLID en botones type="action" editados desde la BD.
         """
         self.ensure_one()
-        # Referencia segura al XMLID de la acciÃ³n de informe y ejecuciÃ³n sobre el registro
+        # Referencia segura al XMLID de la acción de informe y ejecución sobre el registro
         report = self.env.ref('gestion_erasmus.report_gestion_erasmus_contrato_persona')
         return report.report_action(self)
 
@@ -198,9 +198,9 @@ class ErasmusPersona(models.Model):
    
     
 
-    # Campos comunes de identificaciÃ³n
+    # Campos comunes de identificación
     partner_id = fields.Many2one('res.partner', string='Contacto vinculado', tracking=True, help='Contacto de Odoo asociado a esta persona para usar el chat y correo.')
-    # Alias manual (no usamos mail.alias.mixin para evitar creaciÃ³n automÃ¡tica en install/import)
+    # Alias manual (no usamos mail.alias.mixin para evitar creación automática en install/import)
     alias_id = fields.Many2one('mail.alias', string='Alias', readonly=True)
     user_id = fields.Many2one('res.users', string='Usuario Vinculado', readonly=True, help='Usuario de Odoo asociado para acceso al sistema.')
     nombre = fields.Char(tracking=True)
@@ -209,17 +209,17 @@ class ErasmusPersona(models.Model):
     nif = fields.Char(string='NIF', related='partner_id.vat', store=True, readonly=False, index=True, tracking=True, compute_sudo=True)
     # Campos que coinciden con res.partner como relacionados para unificar fuente de verdad
     email = fields.Char(string='Email', related='partner_id.email', store=True, readonly=False, tracking=True, compute_sudo=True)
-    movil = fields.Char(string='MÃ³vil', related='partner_id.mobile', store=True, readonly=False, tracking=True, compute_sudo=True)
-    centro_formacion = fields.Char(string='Centro de FormaciÃ³n', tracking=True)
+    movil = fields.Char(string='Movil', related='partner_id.mobile', store=True, readonly=False, tracking=True, compute_sudo=True)
+    centro_formacion = fields.Char(string='Centro de Formación', tracking=True)
 
-    # DirecciÃ³n (estilo res.partner para autocompletar)
-    street = fields.Char(string='DirecciÃ³n', related='partner_id.street', store=True, readonly=False, compute_sudo=True)
-    street2 = fields.Char(string='DirecciÃ³n (2)', related='partner_id.street2', store=True, readonly=False, compute_sudo=True)
+    # Dirección (estilo res.partner para autocompletar)
+    street = fields.Char(string='Dirección', related='partner_id.street', store=True, readonly=False, compute_sudo=True)
+    street2 = fields.Char(string='Dirección (2)', related='partner_id.street2', store=True, readonly=False, compute_sudo=True)
     zip = fields.Char(string='C.P.', related='partner_id.zip', store=True, readonly=False, compute_sudo=True)
     city = fields.Char(string='Ciudad', related='partner_id.city', store=True, readonly=False, compute_sudo=True)
     state_id = fields.Many2one('res.country.state', string='Provincia / Estado', related='partner_id.state_id', store=True, readonly=False, compute_sudo=True)
-    country_id = fields.Many2one('res.country', string='PaÃ­s', related='partner_id.country_id', store=True, readonly=False, compute_sudo=True)
-    # Detalles adicionales de la direcciÃ³n
+    country_id = fields.Many2one('res.country', string='Paí­s', related='partner_id.country_id', store=True, readonly=False, compute_sudo=True)
+    # Detalles adicionales de la dirección
     portal = fields.Char(string='Portal')
     puerta = fields.Char(string='Puerta')
     # (Eliminado) Campo de autocompletado tipo Maps, se usa el widget directamente en 'street'
@@ -230,7 +230,7 @@ class ErasmusPersona(models.Model):
         ('masculino', 'Masculino'),
         ('femenino', 'Femenino'),
         ('otro', 'Otro')
-    ], string='GÃ©nero')
+    ], string='Género')
     nacionalidad = fields.Many2one('res.country', string='Nacionalidad')
 
     # Imagen (para Kanban / futura foto)
@@ -238,67 +238,67 @@ class ErasmusPersona(models.Model):
 
     # UI visibility flags (computed from tipo_interno for reliable dynamic behavior)
     show_nacionalidad = fields.Boolean(string='Mostrar Nacionalidad', compute='_compute_ui_visibility_flags')
-    show_antiguedad = fields.Boolean(string='Mostrar AntigÃ¼edad', compute='_compute_ui_visibility_flags')
+    show_antiguedad = fields.Boolean(string='Mostrar Antigüedad', compute='_compute_ui_visibility_flags')
     show_idiomas = fields.Boolean(string='Mostrar Idiomas', compute='_compute_ui_visibility_flags')
     show_profesor_coord = fields.Boolean(string='Mostrar Profesor Coord.', compute='_compute_ui_visibility_flags')
 
-    # Niveles de imparticiÃ³n (etiquetas adaptadas al formato mostrado en los selects de las capturas)
+    # Niveles de impartición (etiquetas adaptadas al formato mostrado en los selects de las capturas)
     nivel_imparticion = fields.Selection([
-        ('fpb', 'HASIERAKO LANBIDE HEZIKETA - FORMACIÃ“N PROFESIONAL INICIAL'),
+        ('fpb', 'HASIERAKO LANBIDE HEZIKETA - FORMACIí“N PROFESIONAL INICIAL'),
         ('cfgm', 'ERDI MAILAKO ZIKLOA - CICLO FORMATIVO DE GRADO MEDIO'),
         ('cfgs', 'GOI MAILAKO ZIKLOA - CICLO FORMATIVO DE GRADO SUPERIOR'),
-        ('egm', 'ERDI MAILAKO EZPEZIALIZAZIO IKASTAROA - CURSO DE ESPECIALIZACIÃ“N DE GRADO MEDIO'),
-        ('egs', 'GOI MAILAKO EZPEZIALIZAZIO IKASTAROA - CURSO DE ESPECIALIZACIÃ“N DE GRADO SUPERIOR')
-    ], string='Nivel de ImparticiÃ³n / Estudios')
+        ('egm', 'ERDI MAILAKO EZPEZIALIZAZIO IKASTAROA - CURSO DE ESPECIALIZACIí“N DE GRADO MEDIO'),
+        ('egs', 'GOI MAILAKO EZPEZIALIZAZIO IKASTAROA - CURSO DE ESPECIALIZACIí“N DE GRADO SUPERIOR')
+    ], string='Nivel de Impartición / Estudios')
 
     # Familias profesionales (etiquetas adaptadas al formato mostrado en los selects de las capturas)
     familia_profesional = fields.Selection([
-        ('informatica', 'INFORMATIKA ETA KOMUNIKAZIOA - INFORMÃTICA Y COMUNICACIÃ“N - COMPUTING AND COMMUNICATION'),
-        ('administracion', 'ADMINISTRAZIOA ETA KUDEAKETA - ADMINISTRACIÃ“N Y GESTIÃ“N - BUSINESS AND MANAGEMENT'),
-        ('comercio', 'MERKATARITZA ETA MARKETINGA - COMERCIO Y MÃRKETING - TRADE AND MARKETING'),
+        ('informatica', 'INFORMATIKA ETA KOMUNIKAZIOA - INFORMíTICA Y COMUNICACIÓN - COMPUTING AND COMMUNICATION'),
+        ('administracion', 'ADMINISTRAZIOA ETA KUDEAKETA - ADMINISTRACIÓN Y GESTIÓN - BUSINESS AND MANAGEMENT'),
+        ('comercio', 'MERKATARITZA ETA MARKETINGA - COMERCIO Y MíRKETING - TRADE AND MARKETING'),
         ('sanidad', 'OSASUNA - SANIDAD - HEALTH'),
         ('servicios', 'GIZARTE ETA KULTUR ZERBITZUAK - SERVICIOS SOCIOCULTURALES Y A LA COMUNIDAD - SOCIO-CULTURAL AND COMMUNITY SERVICES'),
-        ('transporte', 'GARRAIOA ETA IBILGAIUEN MANTENTZE LANAK - TRANSPORTE Y MANTENIMIENTO DE VEHÃCULOS - TRANSPORT AND VEHICLE MAINTENANCE')
+        ('transporte', 'GARRAIOA ETA IBILGAIUEN MANTENTZE LANAK - TRANSPORTE Y MANTENIMIENTO DE VEHÍCULOS - TRANSPORT AND VEHICLE MAINTENANCE')
     ], string='Familia Profesional')
 
-    # Ciclos formativos oficiales (segÃºn familias profesionales impartidas en Plaiaundi)
+    # Ciclos formativos oficiales (segíºn familias profesionales impartidas en Plaiaundi)
     ciclo_formativo = fields.Selection([
-        # InformÃ¡tica y Comunicaciones
-        ('smr', 'SM R - MIKROINFORMATIKA SISTEMAK ETA SAREAK - SISTEMAS MICROINFORMÃTICOS Y REDES - MICROCOMPUTER SYSTEMS AND NETWORKS'),
-        ('asir', 'ASIR - SARE-INFORMATIKA SISTEMEN ADMINISTRAZIOA - ADMINISTRACIÃ“N DE SISTEMAS INFORMÃTICOS EN RED - COMPUTER NETWORK SYSTEMS MANAGEMENT'),
+        # Informática y Comunicaciones
+        ('smr', 'SM R - MIKROINFORMATIKA SISTEMAK ETA SAREAK - SISTEMAS MICROINFORMATICOS Y REDES - MICROCOMPUTER SYSTEMS AND NETWORKS'),
+        ('asir', 'ASIR - SARE-INFORMATIKA SISTEMEN ADMINISTRAZIOA - ADMINISTRACIÒN DE SISTEMAS INFORMÁTICOS EN RED - COMPUTER NETWORK SYSTEMS MANAGEMENT'),
         ('dam', 'DAM - PLATAFORMA ANITZEKO APLIKAZIOEN GARAPENA - DESARROLLO DE APLICACIONES MULTIPLATAFORMA - MULTI-PLATFORM APPLICATIONS DEVELOPMENT'),
         ('daw', 'DAW - WEB APLIKAZIOEN GARAPENA - DESARROLLO DE APLICACIONES WEB - DEVELOPMENT OF WEB APPLICATIONS'),
 
-        # AdministraciÃ³n y GestiÃ³n
-        ('gestion_admin', 'GESTION ADMIN - ADMINISTRAZIO KUDEAKETA - GESTIÃ“N ADMINISTRATIVA - ADMINISTRATIVE MANAGEMENT'),
-        ('admin_finanzas', 'ADMIN FINANZAS - ADMINISTRAZIOA ETA FINANTZAK - ADMINISTRACIÃ“N Y FINANZAS - ADMINISTRATION AND FINANCE'),
+        # Administración y Gestión
+        ('gestion_admin', 'GESTION ADMIN - ADMINISTRAZIO KUDEAKETA - GESTIÒN ADMINISTRATIVA - ADMINISTRATIVE MANAGEMENT'),
+        ('admin_finanzas', 'ADMIN FINANZAS - ADMINISTRAZIOA ETA FINANTZAK - ADMINISTRACIí“N Y FINANZAS - ADMINISTRATION AND FINANCE'),
 
-        # Comercio y Marketing / Transporte y LogÃ­stica
-        ('conduccion_transportes', 'CONDUCCION - ERREPIDE GARRAIOARAKO IBILGAILUAK GIDATZEA - CONDUCCIÃ“N DE VEHÃCULOS DE TRANSPORTE POR CARRETERA - DRIVING ROAD TRANSPORT VEHICLES'),
+        # Comercio y Marketing / Transporte y Logí­stica
+        ('conduccion_transportes', 'CONDUCCION - ERREPIDE GARRAIOARAKO IBILGAILUAK GIDATZEA - CONDUCCIí“N DE VEHíCULOS DE TRANSPORTE POR CARRETERA - DRIVING ROAD TRANSPORT VEHICLES'),
         ('comercio_internacional', 'COMERCIO INT - NAZIOARTEKO MERKATARITZA - COMERCIO INTERNACIONAL - INTERNATIONAL TRADE'),
-        ('transporte_logistica', 'TRANSPORTE LOG - GARRAIOA ETA LOGISTIKA - TRANSPORTE Y LOGÃSTICA - TRANSPORTS AND LOGISTICS'),
+        ('transporte_logistica', 'TRANSPORTE LOG - GARRAIOA ETA LOGISTIKA - TRANSPORTE Y LOGíSTICA - TRANSPORTS AND LOGISTICS'),
 
         # Sanidad
-        ('aux_enfermeria', 'AUX ENFERMERIA - ERIZAINTZAREN LAGUNTZA OSAGARRIAK - CUIDADOS AUXILIARES DE ENFERMERÃA - AUXILIARY NURSERY CARE'),
+        ('aux_enfermeria', 'AUX ENFERMERIA - ERIZAINTZAREN LAGUNTZA OSAGARRIAK - CUIDADOS AUXILIARES DE ENFERMERíA - AUXILIARY NURSERY CARE'),
         ('farmacia', 'FARMACIA - FARMAZIA ETA PARAFARMAZIA - FARMACIA Y PARAFARMACIA - PHARMACY AND PARAPHARMACY'),
-        ('dependencia', 'DEPENDENCIA - MENDEKOTASUN-EGOERAN DAUDEN PERTSONENTZAKO ARRETA - ATENCIÃ“N A PERSONAS EN SITUACIÃ“N DE DEPENDENCIA - ASSISTANCE TO PEOPLE IN NEED OF CARE'),
-        ('laboratorio', 'LABORATORIO - LABORATEGI KLINIKO ETA BIOMEDIKOA - LABORATORIO CLÃNICO Y BIOMÃ‰DICO - CLINICAL AND BIOMEDICAL LABORATORY'),
-        ('dietetica', 'DIETETICA - DIETETIKA - DIETÃ‰TICA - DIETETICS'),
+        ('dependencia', 'DEPENDENCIA - MENDEKOTASUN-EGOERAN DAUDEN PERTSONENTZAKO ARRETA - ATENCIí“N A PERSONAS EN SITUACIí“N DE DEPENDENCIA - ASSISTANCE TO PEOPLE IN NEED OF CARE'),
+        ('laboratorio', 'LABORATORIO - LABORATEGI KLINIKO ETA BIOMEDIKOA - LABORATORIO CLíNICO Y BIOMí‰DICO - CLINICAL AND BIOMEDICAL LABORATORY'),
+        ('dietetica', 'DIETETICA - DIETETIKA - DIETí‰TICA - DIETETICS'),
 
         # Servicios Socioculturales y a la Comunidad
-        ('integracion', 'INTEGRACION - GIZARTERATZEA - INTEGRACIÃ“N SOCIAL - SOCIAL INTEGRATION'),
-        ('educacion_infantil', 'EDUC INF - HAUR HEZKUNTZA - EDUCACIÃ“N INFANTIL - PRE-PRIMARY EDUCATION')
+        ('integracion', 'INTEGRACION - GIZARTERATZEA - INTEGRACIí“N SOCIAL - SOCIAL INTEGRATION'),
+        ('educacion_infantil', 'EDUC INF - HAUR HEZKUNTZA - EDUCACIí“N INFANTIL - PRE-PRIMARY EDUCATION')
     ], string='Ciclo Formativo')
 
-    # Nuevo: referencia Many2one a catÃ¡logo de Ciclos para permitir dominio dinÃ¡mico en la vista
+    # Nuevo: referencia Many2one a catálogo de Ciclos para permitir dominio dinámico en la vista
     ciclo_formativo_id = fields.Many2one(
         'erasmus.ciclo',
         string='Ciclo Formativo',
         domain="[('familia_profesional', '=', familia_profesional), ('nivel', '=', nivel_imparticion)]"
     )
 
-    requiere_explicacion = fields.Boolean(string='Requiere ExplicaciÃ³n', compute='_compute_requiere_explicacion', store=True, readonly=True)
-    explicacion_especializacion = fields.Text(string='ExplicaciÃ³n (especializaciÃ³n)')
+    requiere_explicacion = fields.Boolean(string='Requiere Explicación', compute='_compute_requiere_explicacion', store=True, readonly=True)
+    explicacion_especializacion = fields.Text(string='Explicación (especialización)')
 
     @api.depends('nivel_imparticion')
     def _compute_requiere_explicacion(self):
@@ -308,19 +308,19 @@ class ErasmusPersona(models.Model):
     # Idiomas (comunes en estudiante y profesor)
     nivel_ingles = fields.Selection([
         ('a1', 'A1'), ('a2', 'A2'), ('b1', 'B1'), ('b2', 'B2'), ('c1', 'C1'), ('c2', 'C2'), ('nativo', 'Nativo')
-    ], string='Nivel InglÃ©s')
+    ], string='Nivel Inglés')
     nivel_frances = fields.Selection([
         ('a1', 'A1'), ('a2', 'A2'), ('b1', 'B1'), ('b2', 'B2'), ('c1', 'C1'), ('c2', 'C2'), ('nativo', 'Nativo')
-    ], string='Nivel FrancÃ©s')
+    ], string='Nivel Francés')
     nivel_aleman = fields.Selection([
         ('a1', 'A1'), ('a2', 'A2'), ('b1', 'B1'), ('b2', 'B2'), ('c1', 'C1'), ('c2', 'C2'), ('nativo', 'Nativo')
-    ], string='Nivel AlemÃ¡n')
+    ], string='Nivel Alemán')
 
-    # Preferencias de paÃ­s (Erasmus) en la ficha de la persona
-    pref_pais_1_id = fields.Many2one('erasmus.pais', string='Preferencia paÃ­s 1')
-    pref_pais_2_id = fields.Many2one('erasmus.pais', string='Preferencia paÃ­s 2')
-    pref_pais_3_id = fields.Many2one('erasmus.pais', string='Preferencia paÃ­s 3')
-    show_student_only_paises = fields.Boolean(string='Mostrar paÃ­ses solo estudiante', compute='_compute_show_student_only_paises', store=False)
+    # Preferencias de paí­s (Erasmus) en la ficha de la persona
+    pref_pais_1_id = fields.Many2one('erasmus.pais', string='Preferencia paí­s 1')
+    pref_pais_2_id = fields.Many2one('erasmus.pais', string='Preferencia paí­s 2')
+    pref_pais_3_id = fields.Many2one('erasmus.pais', string='Preferencia paí­s 3')
+    show_student_only_paises = fields.Boolean(string='Mostrar paí­ses solo estudiante', compute='_compute_show_student_only_paises', store=False)
 
     @api.depends('pref_pais_1_id.selection_scope', 'pref_pais_2_id.selection_scope', 'pref_pais_3_id.selection_scope')
     def _compute_show_student_only_paises(self):
@@ -330,9 +330,9 @@ class ErasmusPersona(models.Model):
     @api.onchange('pref_pais_1_id', 'pref_pais_2_id', 'pref_pais_3_id')
     def _onchange_pref_paises_persona(self):
         """Dominio de erasmus.pais en ficha Persona, respetando regla:
-        - Mientras no estÃ©n las 3 preferencias cubiertas, mostrar TODOS (ambos + estudiante).
-        - Si entre las 3 hay al menos un paÃ­s 'solo estudiante', seguir mostrando TODOS.
-        - Si estÃ¡n las 3 y ninguna es 'solo estudiante', mostrar solo 'ambos'.
+        - Mientras no estén las 3 preferencias cubiertas, mostrar TODOS (ambos + estudiante).
+        - Si entre las 3 hay al menos un paí­s 'solo estudiante', seguir mostrando TODOS.
+        - Si están las 3 y ninguna es 'solo estudiante', mostrar solo 'ambos'.
         """
         Pais = self.env['erasmus.pais'].sudo()
         ambos_ids = set(Pais.search([('selection_scope', '=', 'ambos'), ('active', '=', True)]).ids)
@@ -349,31 +349,31 @@ class ErasmusPersona(models.Model):
             domain = [('id', 'in', allowed)]
             return {'domain': {'pref_pais_1_id': domain, 'pref_pais_2_id': domain, 'pref_pais_3_id': domain}}
 
-    # CÃ³digos (ahora controlados por catÃ¡logo y de solo lectura)
-    codigo_erasmus = fields.Char(string='CÃ³digo Erasmus', help='CÃ³digo para identificar al estudiante en el programa Erasmus', compute='_compute_codigos', store=True, readonly=True)
+    # Códigos (ahora controlados por catálogo y de solo lectura)
+    codigo_erasmus = fields.Char(string='Código Erasmus', help='Código para identificar al estudiante en el programa Erasmus', compute='_compute_codigos', store=True, readonly=True)
     programa = fields.Char(string='Programa', compute='_compute_codigos', store=True, readonly=True)
-    codigo_iscedf = fields.Char(string='CÃ³digo ISCED-F', compute='_compute_codigos', store=True, readonly=True)
+    codigo_iscedf = fields.Char(string='Código ISCED-F', compute='_compute_codigos', store=True, readonly=True)
 
     profesor_coordinador_nombre = fields.Char(string='Nombre Profesor Coordinador')
     profesor_coordinador_apellido1 = fields.Char(string='Primer Apellido Profesor Coordinador')
     profesor_coordinador_apellido2 = fields.Char(string='Segundo Apellido Profesor Coordinador')
     profesor_coordinador_email = fields.Char(string='Email Profesor Coordinador')
-    profesor_coordinador_telefono = fields.Char(string='TelÃ©fono Profesor Coordinador')
+    profesor_coordinador_telefono = fields.Char(string='Teléfono Profesor Coordinador')
 
     # Campo solo Profesor
-    antiguedad_educacion = fields.Integer(string='AÃ±os Experiencia EducaciÃ³n')
+    antiguedad_educacion = fields.Integer(string='Años Experiencia Educación')
 
     # Computed full name
     nombre_completo = fields.Char(string='Nombre Completo', compute='_compute_nombre_completo', store=True)
-    # Alias estÃ¡ndar para compatibilidad con componentes que esperan un campo 'name'
+    # Alias estándar para compatibilidad con componentes que esperan un campo 'name'
     name = fields.Char(string='Nombre', related='nombre_completo', store=True, readonly=True)
 
-    # SincronizaciÃ³n bÃ¡sica con contacto (campos comunes)
+    # Sincronización básica con contacto (campos comunes)
     partner_name = fields.Char(string='Nombre contacto', related='partner_id.name', readonly=True)
     partner_email = fields.Char(string='Email contacto', related='partner_id.email', readonly=True)
 
     _sql_constraints = [
-        ('uniq_nif', 'unique(nif)', 'El NIF debe ser Ãºnico.'),
+        ('uniq_nif', 'unique(nif)', 'El NIF debe ser íºnico.'),
     ]
 
  
@@ -384,12 +384,12 @@ class ErasmusPersona(models.Model):
         'street', 'city', 'zip', 'state_id', 'country_id'
     )
     def _compute_progreso_documentacion(self):
-        """CÃ¡lculo de progreso basado SOLO en datos personales y direcciÃ³n.
+        """Cálculo de progreso basado SOLO en datos personales y dirección.
         Campos considerados (15 en total):
         - Personales: nombre, apellido1, apellido2, nif, email, movil, centro_formacion,
           fecha_nacimiento, genero, nacionalidad
-        - DirecciÃ³n: street, city, zip, state_id, country_id
-        Cada campo aporta el mismo peso. 100% cuando todos estÃ¡n informados.
+        - Dirección: street, city, zip, state_id, country_id
+        Cada campo aporta el mismo peso. 100% cuando todos están informados.
         Solo aplica a estudiantes; otros tipos quedan en 0.
         """
         for rec in self:
@@ -421,7 +421,7 @@ class ErasmusPersona(models.Model):
 
     @api.constrains('tipo_interno', 'nombre', 'apellido1', 'email', 'movil', 'nif')
     def _check_required_when_assigned(self):
-        """Exigir datos bÃ¡sicos cuando tipo_interno no es 'no_asignado'."""
+        """Exigir datos básicos cuando tipo_interno no es 'no_asignado'."""
         for rec in self:
             if rec.tipo_interno and rec.tipo_interno != 'no_asignado':
                 missing = []
@@ -432,7 +432,7 @@ class ErasmusPersona(models.Model):
                 if not (rec.email or '').strip():
                     missing.append('Email')
                 if not (rec.movil or '').strip():
-                    missing.append('MÃ³vil')
+                    missing.append('Móvil')
                 if not (rec.nif or '').strip():
                     missing.append('NIF')
                 if missing:
@@ -461,9 +461,9 @@ class ErasmusPersona(models.Model):
 
     # --- Contacto vinculado: helpers ---
     def action_create_or_link_partner(self):
-        """Crear o vincular un res.partner con los datos bÃ¡sicos.
+        """Crear o vincular un res.partner con los datos básicos.
         - Si ya hay partner_id: abrirlo.
-        - Si no, crearlo con nombre completo + email + mÃ³vil + direcciÃ³n.
+        - Si no, crearlo con nombre completo + email + míil + dirección.
         Luego suscribirlo como follower para recibir mensajes/correos.
         """
         self.ensure_one()
@@ -504,7 +504,7 @@ class ErasmusPersona(models.Model):
         }
 
     def action_sync_to_partner(self):
-        """Empujar cambios bÃ¡sicos al partner vinculado."""
+        """Empujar cambios básicos al partner vinculado."""
         for rec in self:
             if not rec.partner_id:
                 continue
@@ -520,7 +520,7 @@ class ErasmusPersona(models.Model):
                 'country_id': rec.country_id.id or False,
             }
             rec.partner_id.write(vals)
-            # asegurar suscripciÃ³n
+            # asegurar suscripción
             rec.message_subscribe(partner_ids=[rec.partner_id.id])
 
     @api.model
@@ -570,7 +570,7 @@ class ErasmusPersona(models.Model):
         self._logger.info("[erasmus.persona] CREATE vals_list=%s", vals_list)
         Partner = self.env['res.partner']
         for vals in vals_list:
-            # Reglas especializaciÃ³n
+            # Reglas especialización
             lvl = vals.get('nivel_imparticion')
             if lvl in ('egm', 'egs'):
                 vals.update({'familia_profesional': False, 'ciclo_formativo_id': False, 'ciclo_formativo': False})
@@ -601,7 +601,7 @@ class ErasmusPersona(models.Model):
                     rec.message_subscribe(partner_ids=[rec.profesor_partner_id.id])
             except Exception:
                 pass
-            # Crear usuario vinculado si no existe y hay email (excepto si estÃ¡ 'no_asignado')
+            # Crear usuario vinculado si no existe y hay email (excepto si está 'no_asignado')
             if rec.tipo_interno != 'no_asignado' and not rec.user_id and rec.email and rec.partner_id:
                 # Evitar abortos por login duplicado: comprobar existencia previa
                 existing = self.env['res.users'].sudo().search([('login', '=', rec.email)], limit=1)
@@ -610,9 +610,9 @@ class ErasmusPersona(models.Model):
                 user_vals = {
                     'name': rec.nombre_completo or rec.nombre,
                     'login': rec.email,
-                    'password': 'changeme123',  # ContraseÃ±a predeterminada para todos los nuevos usuarios
+                    'password': 'changeme123',  # Contraseña predeterminada para todos los nuevos usuarios
                     'partner_id': rec.partner_id.id,
-                    # Eliminado: no forzar cambio de contraseÃ±a en primer login
+                    # Eliminado: no forzar cambio de contraseña en primer login
                 }
                 cfg = rec._get_user_group_config(rec.tipo_interno)
                 target_ids = sorted(cfg['target_ids'])
@@ -620,7 +620,7 @@ class ErasmusPersona(models.Model):
                     user_vals['groups_id'] = [(6, 0, target_ids)]
                 user_vals['share'] = cfg['share']
                 user = self.env['res.users'].sudo().create(user_vals)
-                # Preferencias de notificaciÃ³n adaptadas segÃºn perfil
+                # Preferencias de notificación adaptadas segíºn perfil
                 try:
                     if cfg['share']:
                         if rec.partner_id:
@@ -634,13 +634,13 @@ class ErasmusPersona(models.Model):
                             rec.partner_id.sudo().write({'notification_type': cfg['notification']})
                 except Exception:
                     pass
-                # Asegurar que el partner/usuario estÃ© suscrito como follower para recibir mensajes
+                # Asegurar que el partner/usuario esté suscrito como follower para recibir mensajes
                 try:
                     rec.message_subscribe(partner_ids=[user.partner_id.id])
                 except Exception:
                     pass
                 rec.user_id = user.id
-        # Crear alias por persona de forma segura tras la creaciÃ³n (si procede).
+        # Crear alias por persona de forma segura tras la creación (si procede).
         # create_person_alias ya comprueba contexto (install_mode/import_file/mass_person_create)
         for rec in records:
             try:
@@ -651,7 +651,7 @@ class ErasmusPersona(models.Model):
 
     @api.model
     def default_get(self, fields_list):
-        """Pre-carga Programa y CÃ³digo Erasmus con valores globales del catÃ¡logo al abrir el formulario."""
+        """Pre-carga Programa y Código Erasmus con valores globales del catálogo al abrir el formulario."""
         res = super().default_get(fields_list)
         Catalog = self.env['erasmus.codigo']
         def _get_default(key):
@@ -661,12 +661,12 @@ class ErasmusPersona(models.Model):
             res['programa'] = _get_default('programa') or False
         if 'codigo_erasmus' in fields_list and not res.get('codigo_erasmus'):
             res['codigo_erasmus'] = _get_default('codigo_erasmus') or False
-        # ISCED-F depende del ciclo; no se establece por defecto aquÃ­
+        # ISCED-F depende del ciclo; no se establece por defecto aquí­
         return res
 
     def write(self, vals):
         self._logger.info("[erasmus.persona] WRITE ids=%s vals=%s", self.ids, vals)
-        # Guardar email de vals para usarlo despuÃ©s de que se modifique vals
+        # Guardar email de vals para usarlo después de que se modifique vals
         new_email_from_vals = vals.get('email') if 'email' in vals else None
         self._logger.info("[erasmus.persona] DEBUG - Email inicial desde vals: %s", new_email_from_vals)
         # Permitir libremente elegir 'no_asignado' si el usuario lo desea (UI muestra todas las opciones)
@@ -685,7 +685,7 @@ class ErasmusPersona(models.Model):
         }
         rel_keys_present = [k for k in partner_map.keys() if k in vals]
         if rel_keys_present:
-            # Preparar actualizaciÃ³n al partner solo si el origen NO es partner/user
+            # Preparar actualización al partner solo si el origen NO es partner/user
             if not (self.env.context.get('from_partner') or self.env.context.get('from_user')):
                 for rec in self:
                     # Asegurar partner
@@ -702,7 +702,7 @@ class ErasmusPersona(models.Model):
             # Quitar SIEMPRE las claves relacionadas para evitar que super().write dispare writes al partner por ser related
             vals = {k: v for k, v in vals.items() if k not in rel_keys_present}
         
-        # Si se cambia el nivel a especializaciÃ³n, forzar limpieza en el mismo write
+        # Si se cambia el nivel a especialización, forzar limpieza en el mismo write
         if 'nivel_imparticion' in vals and vals.get('nivel_imparticion') in ('egm', 'egs'):
             vals = vals.copy()
             vals.update({
@@ -711,7 +711,7 @@ class ErasmusPersona(models.Model):
                 'ciclo_formativo': False,
             })
         
-        # Si ya estamos en especializaciÃ³n y alguien intenta asignar familia/ciclo, limpiar igualmente
+        # Si ya estamos en especialización y alguien intenta asignar familia/ciclo, limpiar igualmente
         special_recs = self.filtered(lambda r: r.nivel_imparticion in ('egm', 'egs'))
         if special_recs and any(k in vals for k in ('familia_profesional', 'ciclo_formativo_id', 'ciclo_formativo')) and 'nivel_imparticion' not in vals:
             vals_clean = vals.copy()
@@ -819,10 +819,10 @@ class ErasmusPersona(models.Model):
                 if user_upd and not self.env.context.get('skip_user_sync'):
                     try:
                         rec.user_id.sudo().with_context(skip_persona_sync=True).write(user_upd)
-                        self._logger.info("[erasmus.persona] DEBUG - ActualizaciÃ³n usuario exitosa: %s", user_upd)
+                        self._logger.info("[erasmus.persona] DEBUG - Actualización usuario exitosa: %s", user_upd)
                     except Exception as e:
                         self._logger.error("[erasmus.persona] DEBUG - Error al actualizar usuario id=%s: %s", rec.user_id.id, str(e))  
-                # Ajustar preferencias de notificaciÃ³n cuando cambia el tipo y ya existe usuario
+                # Ajustar preferencias de notificación cuando cambia el tipo y ya existe usuario
                 if tipo_changed:
                     try:
                         if cfg['share']:
@@ -837,7 +837,7 @@ class ErasmusPersona(models.Model):
                                 rec.partner_id.sudo().write({'notification_type': cfg['notification']})
                     except Exception:
                         pass
-            # Si cambia el tipo desde 'no_asignado' a uno asignado y no hay usuario aÃºn, crÃ©alo
+            # Si cambia el tipo desde 'no_asignado' a uno asignado y no hay usuario aíºn, créalo
             if tipo_changed and not rec.user_id and rec.tipo_interno and rec.tipo_interno != 'no_asignado' and rec.email and rec.partner_id:
                 try:
                     cfg = rec._get_user_group_config(rec.tipo_interno)
@@ -851,14 +851,14 @@ class ErasmusPersona(models.Model):
                         'email': rec.email,
                         'password': 'changeme123',
                         'partner_id': rec.partner_id.id,
-                        # Eliminado: no forzar cambio de contraseÃ±a en primer acceso
+                        # Eliminado: no forzar cambio de contraseña en primer acceso
                     }
                     target_ids = sorted(cfg['target_ids'])
                     if target_ids:
                         uvals['groups_id'] = [(6, 0, target_ids)]
                     uvals['share'] = cfg['share']
                     user = self.env['res.users'].sudo().create(uvals)
-                    # Notificaciones segÃºn tipo: internos en bandeja, estudiantes por email
+                    # Notificaciones segíºn tipo: internos en bandeja, estudiantes por email
                     try:
                         if cfg['share']:
                             if rec.partner_id:
@@ -889,7 +889,7 @@ class ErasmusPersona(models.Model):
                         rec.user_id.sudo().with_context(skip_persona_sync=True).write({'active': new_active})
                     except Exception:
                         pass
-                # 2) Contacto despuÃ©s
+                # 2) Contacto después
                 if rec.partner_id and not self.env.context.get('skip_partner_back_write'):
                     try:
                         rec.partner_id.sudo().with_context(skip_partner_active_cascade=True).write({'active': new_active})
@@ -907,7 +907,7 @@ class ErasmusPersona(models.Model):
         - alias_force_thread_id = self.id
         """
         self.ensure_one()
-        # Evitar creaciÃ³n durante instalaciÃ³n o import masivo
+        # Evitar creación durante instalación o import masivo
         if self.env.context.get('install_mode') or self.env.context.get('import_file') or self.env.context.get('mass_person_create'):
             return False
         # Si ya tiene alias, nada que hacer
@@ -922,7 +922,7 @@ class ErasmusPersona(models.Model):
             'alias_force_thread_id': self.id,
             'alias_defaults': {},
         }
-        # AÃ±adir claves opcionales si existen en esta versiÃ³n de Odoo (compatibilidad hacia atrÃ¡s)
+        # Añadir claves opcionales si existen en esta versión de Odoo (compatibilidad hacia atrás)
         alias_fields = self.env['mail.alias']._fields
         if 'alias_parent_model_id' in alias_fields:
             vals['alias_parent_model_id'] = model_id
@@ -938,14 +938,14 @@ class ErasmusPersona(models.Model):
     def _message_get_reply_to(self, default=None):
         """
         Reply-To debe ser el correo real para que las respuestas lleguen a Gmail
-        y Odoo las recoja vÃ­a IMAP. NO usar alias porque el dominio no existe.
+        y Odoo las recoja ví­a IMAP. NO usar alias porque el dominio no existe.
         """
         self.ensure_one()
         # Priorizar el correo del servidor "Gmail Estudiantes" configurado
         reply_email = self._get_gmail_estudiantes_email()
         if reply_email:
             return reply_email
-        # Luego el email del registro si es vÃ¡lido
+        # Luego el email del registro si es válido
         if self.email and '@' in self.email:
             return self.email
         # Fallback general
@@ -954,14 +954,14 @@ class ErasmusPersona(models.Model):
     def message_post(self, **kwargs):
         """Forzar reply_to al correo del usuario actual (Gmail real) ignorando alias.
         Esto evita que el sistema use el alias catchall y asegura que las respuestas vuelvan
-        al buzÃ³n IMAP configurado y se encadenen por In-Reply-To.
+        al buzón IMAP configurado y se encadenen por In-Reply-To.
         Prioridad:
         1. env.user.email
-        2. kwargs.get('email_from') si parece vÃ¡lido
+        2. kwargs.get('email_from') si parece válido
         3. company.email
         4. fallback al super (sin forzar)
         """
-        # Priorizar el servidor "Gmail Estudiantes" si estÃ¡ configurado
+        # Priorizar el servidor "Gmail Estudiantes" si está configurado
         estudiantes_email = self._get_gmail_estudiantes_email()
         if estudiantes_email:
             kwargs['reply_to'] = estudiantes_email
@@ -982,7 +982,7 @@ class ErasmusPersona(models.Model):
     def _get_gmail_estudiantes_email(self):
         """Localiza el correo (usuario) del servidor llamado exactamente 'Gmail Estudiantes'.
         Busca primero en servidores de salida (ir.mail_server -> smtp_user) y luego en
-        servidores de entrada (fetchmail.server -> user). Devuelve un email vÃ¡lido o False.
+        servidores de entrada (fetchmail.server -> user). Devuelve un email válido o False.
         """
         MailServer = self.env['ir.mail_server'].sudo()
         server = MailServer.search([('name', '=', 'Gmail Estudiantes'), ('active', '=', True)], limit=1)
@@ -1096,14 +1096,14 @@ class ErasmusPersona(models.Model):
 
     
 
-    # RPC helper para resolver paÃ­s y estado por nombre (para el widget JS)
+    # RPC helper para resolver paí­s y estado por nombre (para el widget JS)
     @api.model
     def resolve_address(self, country_code=None, state_name=None, country_name=None):
         """Resolve country and state IDs robustly.
         Args:
         - country_code: ISO alpha-2 (e.g., 'ES') if available
         - state_name: province/state name or code from Nominatim
-        - country_name: fallback full country name (e.g., 'Spain', 'EspaÃ±a')
+        - country_name: fallback full country name (e.g., 'Spain', 'España')
         """
         country_id = False
         state_id = False
@@ -1137,29 +1137,29 @@ class ErasmusPersona(models.Model):
             if not state and cc == 'ES':
                 aliases = {
                     # Euskadi
-                    'gipuzkoa': {'code': 'SS', 'name': 'GuipÃºzcoa'},
-                    'guipuzcoa': {'code': 'SS', 'name': 'GuipÃºzcoa'},
+                    'gipuzkoa': {'code': 'SS', 'name': 'Guipíºzcoa'},
+                    'guipuzcoa': {'code': 'SS', 'name': 'Guipíºzcoa'},
                     'bizkaia': {'code': 'BI', 'name': 'Vizcaya'},
                     'vizcaya': {'code': 'BI', 'name': 'Vizcaya'},
-                    'araba': {'code': 'VI', 'name': 'Ãlava'},
-                    'alava': {'code': 'VI', 'name': 'Ãlava'},
+                    'araba': {'code': 'VI', 'name': 'ílava'},
+                    'alava': {'code': 'VI', 'name': 'ílava'},
                     # Catalunya
                     'girona': {'code': 'GI', 'name': 'Gerona'},
                     'gerona': {'code': 'GI', 'name': 'Gerona'},
-                    'lleida': {'code': 'L', 'name': 'LÃ©rida'},
-                    'lerida': {'code': 'L', 'name': 'LÃ©rida'},
+                    'lleida': {'code': 'L', 'name': 'Lérida'},
+                    'lerida': {'code': 'L', 'name': 'Lérida'},
                     'tarragona': {'code': 'T', 'name': 'Tarragona'},
                     'barcelona': {'code': 'B', 'name': 'Barcelona'},
-                    # Valencia / ValÃ¨ncia
-                    'castello': {'code': 'CS', 'name': 'CastellÃ³n'},
-                    'castellon': {'code': 'CS', 'name': 'CastellÃ³n'},
+                    # Valencia / Valí¨ncia
+                    'castello': {'code': 'CS', 'name': 'Castellón'},
+                    'castellon': {'code': 'CS', 'name': 'Castellón'},
                     'valencia': {'code': 'V', 'name': 'Valencia'},
                     'alacant': {'code': 'A', 'name': 'Alicante'},
                     'alicante': {'code': 'A', 'name': 'Alicante'},
                     # Galicia
-                    'a coruna': {'code': 'C', 'name': 'A CoruÃ±a'},
-                    'la coruna': {'code': 'C', 'name': 'A CoruÃ±a'},
-                    'coruna': {'code': 'C', 'name': 'A CoruÃ±a'},
+                    'a coruna': {'code': 'C', 'name': 'A Coruña'},
+                    'la coruna': {'code': 'C', 'name': 'A Coruña'},
+                    'coruna': {'code': 'C', 'name': 'A Coruña'},
                     'ourense': {'code': 'OR', 'name': 'Ourense'},
                     'orense': {'code': 'OR', 'name': 'Ourense'},
                     'pontevedra': {'code': 'PO', 'name': 'Pontevedra'},
@@ -1183,23 +1183,23 @@ class ErasmusPersona(models.Model):
         return {'country_id': country_id, 'state_id': state_id}
 
     # ----------------------------
-    # ONCHANGE dinÃ¡micos de filtro
+    # ONCHANGE dinámicos de filtro
     # ----------------------------
 
     @api.onchange('nivel_imparticion')
     def _onchange_nivel_imparticion(self):
-        """Ajusta los valores visibles/permitidos en funciÃ³n del nivel.
+        """Ajusta los valores visibles/permitidos en función del nivel.
         NOTA: 'familia_profesional' y 'ciclo_formativo' son campos Selection; los dominios no aplican.
-        Por eso aquÃ­ forzamos valores coherentes y limpiamos los invÃ¡lidos para evitar combinaciones inconsistentes.
+        Por eso aquí­ forzamos valores coherentes y limpiamos los inválidos para evitar combinaciones inconsistentes.
         """
         """Ajusta por nivel: limpia ciclos si el nivel no coincide."""
         for rec in self:
             self._logger.info("[onchange nivel_imparticion] id=%s nivel=%s before fam=%s ciclo_id=%s ciclo=%s", rec.id or '(new)', rec.nivel_imparticion, rec.familia_profesional, bool(rec.ciclo_formativo_id), rec.ciclo_formativo)
-            # Si el ciclo seleccionado no pertenece al nivel actual, limpiar selecciÃ³n
+            # Si el ciclo seleccionado no pertenece al nivel actual, limpiar selección
             if rec.ciclo_formativo_id and rec.ciclo_formativo_id.nivel and rec.ciclo_formativo_id.nivel != rec.nivel_imparticion:
                 rec.ciclo_formativo_id = False
                 rec.ciclo_formativo = False
-            # Si es una especializaciÃ³n, limpiar familia y ciclo y dejar los selects desactivados por vista
+            # Si es una especialización, limpiar familia y ciclo y dejar los selects desactivados por vista
             if rec.nivel_imparticion in ('egm', 'egs'):
                 rec.familia_profesional = False
                 rec.ciclo_formativo_id = False
@@ -1209,7 +1209,7 @@ class ErasmusPersona(models.Model):
 
     @api.onchange('familia_profesional')
     def _onchange_familia_profesional(self):
-        """Ajusta el ciclo_formativo permitido segÃºn la familia profesional.
+        """Ajusta el ciclo_formativo permitido segíºn la familia profesional.
         Al ser Selection, no podemos aplicar dominio real; en su lugar, validamos y corregimos el valor.
         """
         allowed_by_family = {
@@ -1228,7 +1228,7 @@ class ErasmusPersona(models.Model):
             allowed = allowed_by_family.get(rec.familia_profesional, [])
             if rec.ciclo_formativo not in allowed:
                 rec.ciclo_formativo = False
-            # Ajustar Many2one segÃºn familia/domino
+            # Ajustar Many2one segíºn familia/domino
             if rec.ciclo_formativo:
                 ciclo = self.env['erasmus.ciclo'].search([('code', '=', rec.ciclo_formativo)], limit=1)
                 rec.ciclo_formativo_id = ciclo.id if ciclo and ciclo.familia_profesional == rec.familia_profesional else False
@@ -1246,21 +1246,21 @@ class ErasmusPersona(models.Model):
                 rec.ciclo_formativo = rec.ciclo_formativo_id.code
             else:
                 rec.ciclo_formativo = False
-        # Recalcular cÃ³digos en cliente al cambiar de ciclo
+        # Recalcular códigos en cliente al cambiar de ciclo
         self._compute_codigos()
 
     @api.onchange('profesor_id')
     def _onchange_profesor_id_fill_coordinator(self):
         """Al asignar un profesor, no copiar datos al bloque de 'Profesor Coordinador'.
-        PeticiÃ³n: que la selecciÃ³n sirva solo para vincular (profesor asignado) y no auto-rellene nada.
+        Petición: que la selección sirva solo para vincular (profesor asignado) y no auto-rellene nada.
         """
         # Intencionadamente no modificamos los campos de coordinador.
-        # Si en el futuro se quiere limpiar esos campos al cambiar el profesor, se podrÃ­a hacer aquÃ­,
+        # Si en el futuro se quiere limpiar esos campos al cambiar el profesor, se podrí­a hacer aquí­,
         # pero por ahora respetamos cualquier dato introducido manualmente.
         return
 
     def _get_codigo_catalogo(self, key, ciclo):
-        """Obtiene el cÃ³digo desde el catÃ¡logo, priorizando por ciclo y con fallback global.
+        """Obtiene el código desde el catálogo, priorizando por ciclo y con fallback global.
         key: 'programa' | 'codigo_erasmus' | 'codigo_iscedf'
         ciclo: erasmus.ciclo record or False
         """
@@ -1282,7 +1282,7 @@ class ErasmusPersona(models.Model):
 
     @api.onchange('requiere_explicacion')
     def _onchange_requiere_explicacion(self):
-        """Si el nivel implica especializaciÃ³n, limpimos familia y ciclo para evitar valores residuales."""
+        """Si el nivel implica especialización, limpimos familia y ciclo para evitar valores residuales."""
         for rec in self:
             if rec.requiere_explicacion:
                 self._logger.info("[onchange requiere_explicacion] cleaning fam/ciclo due to specialization. id=%s", rec.id or '(new)')
