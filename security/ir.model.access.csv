@@ -1,1 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_erasmus_tipo_contacto_admin,erasmus.tipo.contacto.admin,model_erasmus_tipo_contacto,gestion_erasmus.group_erasmus_admin,1,1,1,1

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="menu_erasmus_root"
+        name="Erasmus"
+        groups="gestion_erasmus.group_erasmus_admin"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_erasmus_configuracion"
+        name="Configuración"
+        parent="menu_erasmus_root"
+        sequence="90"
+        groups="gestion_erasmus.group_erasmus_admin"
+    />
+
+    <menuitem
+        id="menu_erasmus_tipo_contacto"
+        name="Tipos de contacto"
+        parent="menu_erasmus_configuracion"
+        action="action_erasmus_tipo_contacto"
+        groups="gestion_erasmus.group_erasmus_admin"
+        sequence="10"
+    />
+
+</odoo>
