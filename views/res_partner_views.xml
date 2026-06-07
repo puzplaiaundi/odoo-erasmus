@@ -10,7 +10,9 @@
                     <group>
                         <group>
                             <field name="es_erasmus"/>
-                            <field name="tipo_contacto_erasmus_id"/>
+                            <field name="tipo_contacto_erasmus_id"
+                             context="{'form_view_ref': 'gestion_erasmus.view_erasmus_tipo_contacto_form'}"
+                        />
                         </group>
                         <group>
                             <field name="primer_apellido"/>
