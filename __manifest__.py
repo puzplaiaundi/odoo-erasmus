@@ -8,14 +8,18 @@
 Módulo para gestionar personas vinculadas a Erasmus (Estudiantes, Profesores y Acompañantes) en un único modelo.
     """,
 
-    'author': "My Company",
-    'website': "https://www.yourcompany.com",
+    'author': "Pablo uzquiano",
+    'website': "https://www.plaiaundi.com",
 
     'category': 'Uncategorized',
-    'version': '17.0.1.1.0',
+    'version': '17.0.1.0.0',
     'license': 'LGPL-3',
 
-    'depends': ['base', 'contacts'],
+    'depends': [
+        'base', 
+        'contacts',
+        'mail'
+        ],
 
     'data': [
         'security/ir.model.access.csv',
