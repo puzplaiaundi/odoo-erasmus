@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="action_erasmus_contacts" model="ir.actions.act_window">
+        <field name="name">Contactos Erasmus</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('es_erasmus', '=', True)]</field>
+        <field name="context">{'default_es_erasmus': True}</field>
+    </record>
 
     <menuitem
         id="menu_erasmus_root"
         name="Erasmus"
-        groups="gestion_erasmus.group_erasmus_admin"
+        groups="gestion_erasmus.group_erasmus_user"
+        sequence="10"
+    />
+    <menuitem
+        id="menu_erasmus_contacts"
+        name="Contactos Erasmus"
+        parent="menu_erasmus_root"
+        action="action_erasmus_contacts"
+        groups="gestion_erasmus.group_erasmus_user"
         sequence="10"
     />
 
