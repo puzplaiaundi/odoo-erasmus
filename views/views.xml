@@ -423,9 +423,21 @@
                     <field name="show_student_only_paises" invisible="1"/>
                   </group>
                   <group string="Idiomas">
-                    <field name="nivel_ingles"/>
-                    <field name="nivel_frances"/>
-                    <field name="nivel_aleman"/>
+                    <group string="Idioma 1">
+                      <field name="idioma_1_id"/>
+                      <field name="nivel_idioma_1_id"/>
+                      <field name="idioma_1_acreditado"/>
+                    </group>
+                    <group string="Idioma 2">
+                      <field name="idioma_2_id"/>
+                      <field name="nivel_idioma_2_id"/>
+                      <field name="idioma_2_acreditado"/>
+                    </group>
+                    <group string="Idioma 3">
+                      <field name="idioma_3_id"/>
+                      <field name="nivel_idioma_3_id"/>
+                      <field name="idioma_3_acreditado"/>
+                    </group>
                   </group>
                 </group>
                 <group string="Profesor Coordinador">

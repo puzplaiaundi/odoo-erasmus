@@ -301,16 +301,18 @@ class ErasmusPersona(models.Model):
         for rec in self:
             rec.requiere_explicacion = rec.nivel_imparticion in ('egm', 'egs')
 
-    # Idiomas (comunes en estudiante y profesor)
-    nivel_ingles = fields.Selection([
-        ('a1', 'A1'), ('a2', 'A2'), ('b1', 'B1'), ('b2', 'B2'), ('c1', 'C1'), ('c2', 'C2'), ('nativo', 'Nativo')
-    ], string='Nivel Inglés')
-    nivel_frances = fields.Selection([
-        ('a1', 'A1'), ('a2', 'A2'), ('b1', 'B1'), ('b2', 'B2'), ('c1', 'C1'), ('c2', 'C2'), ('nativo', 'Nativo')
-    ], string='Nivel Francés')
-    nivel_aleman = fields.Selection([
-        ('a1', 'A1'), ('a2', 'A2'), ('b1', 'B1'), ('b2', 'B2'), ('c1', 'C1'), ('c2', 'C2'), ('nativo', 'Nativo')
-    ], string='Nivel Alemán')
+    # Idiomas (3 tripletas: idioma, nivel y acreditacion)
+    idioma_1_id = fields.Many2one('res.lang', string='Idioma 1')
+    nivel_idioma_1_id = fields.Many2one('erasmus.nivel.idioma', string='Nivel idioma 1')
+    idioma_1_acreditado = fields.Boolean(string='Acreditacion 1')
+
+    idioma_2_id = fields.Many2one('res.lang', string='Idioma 2')
+    nivel_idioma_2_id = fields.Many2one('erasmus.nivel.idioma', string='Nivel idioma 2')
+    idioma_2_acreditado = fields.Boolean(string='Acreditacion 2')
+
+    idioma_3_id = fields.Many2one('res.lang', string='Idioma 3')
+    nivel_idioma_3_id = fields.Many2one('erasmus.nivel.idioma', string='Nivel idioma 3')
+    idioma_3_acreditado = fields.Boolean(string='Acreditacion 3')
 
     # Preferencias de país (Erasmus) en la ficha de la persona
     pref_pais_1_id = fields.Many2one('erasmus.pais', string='Preferencia país 1')
@@ -1068,9 +1070,15 @@ class ErasmusPersona(models.Model):
             )
             if rec.tipo_interno == 'profesor':
                 # Clear student-only fields
-                rec.nivel_ingles = False
-                rec.nivel_frances = False
-                rec.nivel_aleman = False
+                rec.idioma_1_id = False
+                rec.nivel_idioma_1_id = False
+                rec.idioma_1_acreditado = False
+                rec.idioma_2_id = False
+                rec.nivel_idioma_2_id = False
+                rec.idioma_2_acreditado = False
+                rec.idioma_3_id = False
+                rec.nivel_idioma_3_id = False
+                rec.idioma_3_acreditado = False
                 rec.profesor_coordinador_nombre = False
                 rec.profesor_coordinador_apellido1 = False
                 rec.profesor_coordinador_apellido2 = False
@@ -1081,9 +1089,15 @@ class ErasmusPersona(models.Model):
                 rec.antiguedad_educacion = False
             elif rec.tipo_interno == 'acompaniante':
                 # Clear both student/professor specific fields
-                rec.nivel_ingles = False
-                rec.nivel_frances = False
-                rec.nivel_aleman = False
+                rec.idioma_1_id = False
+                rec.nivel_idioma_1_id = False
+                rec.idioma_1_acreditado = False
+                rec.idioma_2_id = False
+                rec.nivel_idioma_2_id = False
+                rec.idioma_2_acreditado = False
+                rec.idioma_3_id = False
+                rec.nivel_idioma_3_id = False
+                rec.idioma_3_acreditado = False
                 rec.profesor_coordinador_nombre = False
                 rec.profesor_coordinador_apellido1 = False
                 rec.profesor_coordinador_apellido2 = False

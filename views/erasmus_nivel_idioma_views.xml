@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_erasmus_nivel_idioma_tree" model="ir.ui.view">
+        <field name="name">erasmus.nivel.idioma.tree</field>
+        <field name="model">erasmus.nivel.idioma</field>
+        <field name="arch" type="xml">
+            <tree string="Niveles de idioma ">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_erasmus_nivel_idioma_form" model="ir.ui.view">
+        <field name="name">erasmus.nivel.idioma.form</field>
+        <field name="model">erasmus.nivel.idioma</field>
+        <field name="arch" type="xml">
+            <form string="Nivel de idioma ">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_erasmus_nivel_idioma" model="ir.actions.act_window">
+        <field name="name">Niveles de idioma</field>
+        <field name="res_model">erasmus.nivel.idioma</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
