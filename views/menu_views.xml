@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <odoo>
     <record id="action_erasmus_contacts" model="ir.actions.act_window">
         <field name="name">Contactos Erasmus</field>
@@ -28,7 +30,7 @@
         name="Configuración"
         parent="menu_erasmus_root"
         sequence="90"
-        groups="gestion_erasmus.group_erasmus_admin"
+        groups="gestion_erasmus.group_erasmus_user"
     />
 
     <menuitem
@@ -38,6 +40,15 @@
         action="action_erasmus_tipo_contacto"
         groups="gestion_erasmus.group_erasmus_admin"
         sequence="10"
+    />
+    
+    <menuitem
+        id="menu_erasmus_nivel_formacion"
+        name="Niveles de formación"
+        parent="menu_erasmus_configuracion"
+        action="action_erasmus_nivel_formacion"
+        groups="gestion_erasmus.group_erasmus_user"
+        sequence="20"
     />
 
 </odoo>

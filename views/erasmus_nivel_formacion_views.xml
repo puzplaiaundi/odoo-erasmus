@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_erasmus_nivel_formacion_tree" model="ir.ui.view">
+        <field name="name">erasmus.nivel.formacion.tree</field>
+        <field name="model">erasmus.nivel.formacion</field>
+        <field name="arch" type="xml">
+            <tree string="Niveles de formación Erasmus">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_erasmus_nivel_formacion_form" model="ir.ui.view">
+        <field name="name">erasmus.nivel.formacion.form</field>
+        <field name="model">erasmus.nivel.formacion</field>
+        <field name="arch" type="xml">
+            <form string="Nivel de formación Erasmus">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_erasmus_nivel_formacion" model="ir.actions.act_window">
+        <field name="name">Niveles de formación</field>
+        <field name="res_model">erasmus.nivel.formacion</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
