@@ -2,4 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_erasmus_tipo_contacto_admin,erasmus.tipo.contacto.admin,model_erasmus_tipo_contacto,gestion_erasmus.group_erasmus_admin,1,1,1,1
 access_erasmus_tipo_contacto_internal_read,erasmus.tipo.contacto.internal.read,model_erasmus_tipo_contacto,base.group_user,1,0,0,0
 access_erasmus_nivel_formacion_admin,erasmus.nivel.formacion.admin,model_erasmus_nivel_formacion,gestion_erasmus.group_erasmus_admin,1,1,1,1
-access_erasmus_nivel_formacion_user,erasmus.nivel.formacion.user,model_erasmus_nivel_formacion,gestion_erasmus.group_erasmus_user,1,1,1,1
+access_erasmus_nivel_formacion_user,erasmus.nivel.formacion.user,model_erasmus_nivel_formacion,gestion_erasmus.group_erasmus_user,1,0,0,0
