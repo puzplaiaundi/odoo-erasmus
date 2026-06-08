@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="view_erasmus_ciclo_formativo_tree" model="ir.ui.view">
+        <field name="name">erasmus.ciclo.formativo.tree</field>
+        <field name="model">erasmus.ciclo.formativo</field>
+        <field name="arch" type="xml">
+            <tree string="Ciclos formativos Erasmus">
+                <field name="name"/>
+                <field name="codigo"/>
+                <field name="nivel_formacion_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_erasmus_ciclo_formativo_form" model="ir.ui.view">
+        <field name="name">erasmus.ciclo.formativo.form</field>
+        <field name="model">erasmus.ciclo.formativo</field>
+        <field name="arch" type="xml">
+            <form string="Ciclo formativo Erasmus">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="codigo"/>
+                            <field name="nivel_formacion_id"/>
+                            <field name="active"/>
+                            <field name="familia_profesional_id"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <field name="descripcion"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_erasmus_ciclo_formativo" model="ir.actions.act_window">
+        <field name="name">Ciclos formativos</field>
+        <field name="res_model">erasmus.ciclo.formativo</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

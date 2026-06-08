@@ -3,3 +3,7 @@ access_erasmus_tipo_contacto_admin,erasmus.tipo.contacto.admin,model_erasmus_tip
 access_erasmus_tipo_contacto_internal_read,erasmus.tipo.contacto.internal.read,model_erasmus_tipo_contacto,base.group_user,1,0,0,0
 access_erasmus_nivel_formacion_admin,erasmus.nivel.formacion.admin,model_erasmus_nivel_formacion,gestion_erasmus.group_erasmus_admin,1,1,1,1
 access_erasmus_nivel_formacion_user,erasmus.nivel.formacion.user,model_erasmus_nivel_formacion,gestion_erasmus.group_erasmus_user,1,0,0,0
+access_erasmus_ciclo_formativo_admin,erasmus.ciclo.formativo.admin,model_erasmus_ciclo_formativo,gestion_erasmus.group_erasmus_admin,1,1,1,1
+access_erasmus_ciclo_formativo_user,erasmus.ciclo.formativo.user,model_erasmus_ciclo_formativo,gestion_erasmus.group_erasmus_user,1,0,0,0
+access_erasmus_familia_profesional_admin,erasmus.familia.profesional.admin,model_erasmus_familia_profesional,gestion_erasmus.group_erasmus_admin,1,1,1,1
+access_erasmus_familia_profesional_read,erasmus.familia.profesional.read,model_erasmus_familia_profesional,gestion_erasmus.group_erasmus_user,1,0,0,0

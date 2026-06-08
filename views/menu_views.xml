@@ -50,5 +50,21 @@
         groups="gestion_erasmus.group_erasmus_user"
         sequence="20"
     />
+    <menuitem
+    id="menu_erasmus_ciclo_formativo"
+    name="Ciclos formativos"
+    parent="menu_erasmus_configuracion"
+    action="action_erasmus_ciclo_formativo"
+    groups="gestion_erasmus.group_erasmus_admin"
+    sequence="30"
+    />
+    <menuitem
+    id="menu_erasmus_familia_profesional"
+    name="Familias Profesionales"
+    parent="menu_erasmus_configuracion"
+    action="action_erasmus_familia_profesional"
+    groups="gestion_erasmus.group_erasmus_admin"
+    sequence="40"
+    />
 
 </odoo>
