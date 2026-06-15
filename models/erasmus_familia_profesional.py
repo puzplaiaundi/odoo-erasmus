@@ -15,7 +15,8 @@ class ErasmusFamiliaProfesional(models.Model):
 
     name = fields.Char(
         string='Nombre de la Familia Profesional',
-        required=True
+        required=True,
+        translate=True
     )
     active = fields.Boolean(
         string='Activo',

@@ -68,3 +68,16 @@
   box-sizing: border-box;
 }
 /* Sin estilos especiales para no archivados: se quedan normales */
+
+/* Campos de nombre/apellidos en formulario de contacto Erasmus */
+.ge-erasmus-input input {
+  background-color: #f4f8ff !important;
+  border: 1px solid #8aa6d9 !important;
+  border-radius: 10px !important;
+  padding: 6px 10px;
+}
+
+.ge-erasmus-input input:focus {
+  border-color: #5b84cc !important;
+  box-shadow: 0 0 0 0.2rem rgba(91, 132, 204, 0.15) !important;
+}

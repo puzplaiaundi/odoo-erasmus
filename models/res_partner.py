@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class ResPartner(models.Model):
@@ -62,3 +62,65 @@ class ResPartner(models.Model):
     idioma_3_acreditado = fields.Boolean(
         string='Certificado idioma 3',
     )
+
+    @api.model
+    def _build_erasmus_full_name(self, nombre=None, apellido1=None, apellido2=None):
+        nombre = (nombre or '').strip()
+        apellido1 = (apellido1 or '').strip()
+        apellido2 = (apellido2 or '').strip()
+
+        apellidos = ' '.join(part for part in [apellido1, apellido2] if part)
+        if apellidos and nombre:
+            return '%s, %s' % (apellidos, nombre)
+        return apellidos or nombre
+
+    @api.onchange('erasmus_nombre', 'erasmus_apellido1', 'erasmus_apellido2')
+    def _onchange_erasmus_name_parts(self):
+        for partner in self:
+            full_name = partner._build_erasmus_full_name(
+                partner.erasmus_nombre,
+                partner.erasmus_apellido1,
+                partner.erasmus_apellido2,
+            )
+            partner.name = full_name or False
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        tracked_fields = ('erasmus_nombre', 'erasmus_apellido1', 'erasmus_apellido2')
+        for vals in vals_list:
+            is_erasmus = vals.get('es_erasmus')
+            has_name_parts = any(vals.get(key) for key in tracked_fields)
+            if is_erasmus or has_name_parts:
+                full_name = self._build_erasmus_full_name(
+                    vals.get('erasmus_nombre'),
+                    vals.get('erasmus_apellido1'),
+                    vals.get('erasmus_apellido2'),
+                )
+                if full_name:
+                    vals['name'] = full_name
+        return super().create(vals_list)
+
+    def write(self, vals):
+        res = super().write(vals)
+
+        if self.env.context.get('skip_erasmus_name_sync'):
+            return res
+
+        tracked_fields = {'erasmus_nombre', 'erasmus_apellido1', 'erasmus_apellido2'}
+        if not tracked_fields.intersection(vals):
+            return res
+
+        for partner in self:
+            full_name = partner._build_erasmus_full_name(
+                partner.erasmus_nombre,
+                partner.erasmus_apellido1,
+                partner.erasmus_apellido2,
+            )
+            if full_name and partner.name != full_name:
+                super(ResPartner, partner.with_context(skip_erasmus_name_sync=True)).write({
+                    'name': full_name,
+                })
+
+        return res
+
+
