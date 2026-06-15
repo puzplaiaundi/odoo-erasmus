@@ -24,7 +24,6 @@ Módulo para gestionar personas vinculadas a Erasmus (Estudiantes, Profesores y 
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',
-        'views/assets.xml',
         'views/erasmus_tipo_contacto_views.xml',
         'views/erasmus_nivel_formacion_views.xml',
         'views/erasmus_nivel_idioma_views.xml',
@@ -34,6 +33,14 @@ Módulo para gestionar personas vinculadas a Erasmus (Estudiantes, Profesores y 
         'views/menu_views.xml',
         'views/res_partner_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'gestion_erasmus/static/src/css/backend.css',
+        ],
+        'web.assets_frontend': [
+            'gestion_erasmus/static/src/css/portal.css',
+        ],
+    },
     'application': True,
     'installable': True,
     'auto_install': False,

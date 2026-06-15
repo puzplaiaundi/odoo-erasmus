@@ -45,9 +45,18 @@
                     <group>
                         <group>
                             <field name="es_erasmus"/>
+                            <field name="familia_profesional_erasmus_id"
+                                context="{'form_view_ref': 'gestion_erasmus.view_erasmus_familia_profesional_form'}"
+                            />
+                            <field name="nivel_formacion_erasmus_disponible_ids" invisible="1"/>
                             <field name="nivel_formacion_erasmus_id"
-                             context="{'form_view_ref': 'gestion_erasmus.view_erasmus_nivel_formacion_form'}"
-                        />
+                                domain="[('id', 'in', nivel_formacion_erasmus_disponible_ids)]"
+                                context="{'form_view_ref': 'gestion_erasmus.view_erasmus_nivel_formacion_form'}"
+                            />
+                            <field name="ciclo_formativo_erasmus_id"
+                                domain="[('nivel_formacion_id', '=', nivel_formacion_erasmus_id), ('familia_profesional_id', '=', familia_profesional_erasmus_id)]"
+                                context="{'form_view_ref': 'gestion_erasmus.view_erasmus_ciclo_formativo_form'}"
+                            />
                         </group>
                     
                     </group>

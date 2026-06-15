@@ -22,9 +22,27 @@ class ResPartner(models.Model):
         string='Tipo de contacto',
     )
 
+    familia_profesional_erasmus_id = fields.Many2one(
+        comodel_name='erasmus.familia.profesional',
+        string='Familia profesional',
+    )
+
+    nivel_formacion_erasmus_disponible_ids = fields.Many2many(
+        comodel_name='erasmus.nivel.formacion',
+        compute='_compute_niveles_formacion_disponibles',
+        string='Niveles de formacion disponibles',
+    )
+
     nivel_formacion_erasmus_id = fields.Many2one(
         comodel_name='erasmus.nivel.formacion',
         string='Nivel de formacion',
+        domain="[('id', 'in', nivel_formacion_erasmus_disponible_ids)]",
+    )
+
+    ciclo_formativo_erasmus_id = fields.Many2one(
+        comodel_name='erasmus.ciclo.formativo',
+        string='Ciclo formativo',
+        domain="[('nivel_formacion_id', '=', nivel_formacion_erasmus_id), ('familia_profesional_id', '=', familia_profesional_erasmus_id)]",
     )
 
     idioma_1_id = fields.Many2one(
@@ -62,6 +80,54 @@ class ResPartner(models.Model):
     idioma_3_acreditado = fields.Boolean(
         string='Certificado idioma 3',
     )
+
+    @api.depends('familia_profesional_erasmus_id')
+    def _compute_niveles_formacion_disponibles(self):
+        Ciclo = self.env['erasmus.ciclo.formativo']
+        for partner in self:
+            if not partner.familia_profesional_erasmus_id:
+                partner.nivel_formacion_erasmus_disponible_ids = [(5, 0, 0)]
+                continue
+
+            ciclos = Ciclo.search([
+                ('familia_profesional_id', '=', partner.familia_profesional_erasmus_id.id),
+                ('nivel_formacion_id', '!=', False),
+            ])
+            niveles = ciclos.mapped('nivel_formacion_id')
+            partner.nivel_formacion_erasmus_disponible_ids = [(6, 0, niveles.ids)]
+
+    @api.onchange('familia_profesional_erasmus_id')
+    def _onchange_familia_profesional_erasmus(self):
+        for partner in self:
+            if not partner.familia_profesional_erasmus_id:
+                partner.nivel_formacion_erasmus_id = False
+                partner.ciclo_formativo_erasmus_id = False
+                continue
+
+            niveles_validos = partner.nivel_formacion_erasmus_disponible_ids
+            if partner.nivel_formacion_erasmus_id not in niveles_validos:
+                partner.nivel_formacion_erasmus_id = False
+                partner.ciclo_formativo_erasmus_id = False
+                continue
+
+            if partner.ciclo_formativo_erasmus_id and (
+                partner.ciclo_formativo_erasmus_id.familia_profesional_id != partner.familia_profesional_erasmus_id
+                or partner.ciclo_formativo_erasmus_id.nivel_formacion_id != partner.nivel_formacion_erasmus_id
+            ):
+                partner.ciclo_formativo_erasmus_id = False
+
+    @api.onchange('nivel_formacion_erasmus_id')
+    def _onchange_nivel_formacion_erasmus(self):
+        for partner in self:
+            if not partner.nivel_formacion_erasmus_id:
+                partner.ciclo_formativo_erasmus_id = False
+                continue
+
+            if partner.ciclo_formativo_erasmus_id and (
+                partner.ciclo_formativo_erasmus_id.nivel_formacion_id != partner.nivel_formacion_erasmus_id
+                or partner.ciclo_formativo_erasmus_id.familia_profesional_id != partner.familia_profesional_erasmus_id
+            ):
+                partner.ciclo_formativo_erasmus_id = False
 
     @api.model
     def _build_erasmus_full_name(self, nombre=None, apellido1=None, apellido2=None):
