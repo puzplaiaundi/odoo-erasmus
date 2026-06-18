@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="erasmus_nivel_formacion_grado_medio" model="erasmus.nivel.formacion">
+        <field name="name">Grado Medio</field>
+        <field name="sequence">10</field>
+        <field name="active">1</field>
+    </record>
+
+    <record id="erasmus_nivel_formacion_grado_superior" model="erasmus.nivel.formacion">
+        <field name="name">Grado Superior</field>
+        <field name="sequence">20</field>
+        <field name="active">1</field>
+    </record>
+
+    <record id="erasmus_nivel_formacion_especializacion" model="erasmus.nivel.formacion">
+        <field name="name">Especialización</field>
+        <field name="sequence">30</field>
+        <field name="active">1</field>
+    </record>
+</odoo>

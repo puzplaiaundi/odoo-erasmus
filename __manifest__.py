@@ -29,9 +29,11 @@ Módulo para gestionar personas vinculadas a Erasmus (Estudiantes, Profesores y 
         'views/erasmus_nivel_idioma_views.xml',
         'views/erasmus_familia_profesional_views.xml',
         'views/erasmus_ciclo_formativo_views.xml',
-
         'views/menu_views.xml',
         'views/res_partner_views.xml',
+        'data/erasmus_nivel_formacion_data.xml',
+        'data/erasmus_familia_profesional_data.xml'
+
     ],
     'assets': {
         'web.assets_backend': [
