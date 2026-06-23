@@ -25,11 +25,12 @@ Módulo para gestionar personas vinculadas a Erasmus (Estudiantes, Profesores y 
         'security/groups.xml',
         'security/ir.model.access.csv',
         'views/erasmus_tipo_contacto_views.xml',
+        'views/erasmus_tipo_movilidad_views.xml',
         'views/erasmus_nivel_formacion_views.xml',
         'views/erasmus_nivel_idioma_views.xml',
         'views/erasmus_familia_profesional_views.xml',
         'views/erasmus_ciclo_formativo_views.xml',
-
+        'views/erasmus_programa_views.xml',
         'views/menu_views.xml',
         'views/res_partner_views.xml',
     ],

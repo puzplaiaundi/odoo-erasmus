@@ -26,3 +26,11 @@ class ErasmusTipoContacto(models.Model):
         string='Activo',
         default=True,
     )
+
+    tipo_movilidad_ids = fields.Many2many(
+        comodel_name='erasmus.tipo.movilidad',
+        relation='erasmus_tipo_movilidad_tipo_contacto_rel',
+        column1='tipo_contacto_id',
+        column2='tipo_movilidad_id',
+        string='Tipos de movilidad',
+    )

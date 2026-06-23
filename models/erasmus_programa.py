@@ -3,9 +3,9 @@
 from odoo import fields, models
 
 
-class ErasmusNivelFormacion(models.Model):
-	_name = 'erasmus.nivel.formacion'
-	_description = 'Nivel de formacion Erasmus'
+class ErasmusPrograma(models.Model):
+	_name = 'erasmus.programa'
+	_description = 'Programa Erasmus'
 	_order = 'sequence, name'
 
 	name = fields.Char(
@@ -17,11 +17,7 @@ class ErasmusNivelFormacion(models.Model):
 		string='Secuencia',
 		default=10,
 	)
-	programa_id = fields.Many2one(
-		string='Programa Erasmus',
-		comodel_name='erasmus.programa',
-	)
-	
+
 	active = fields.Boolean(
 		string='Activo',
 		default=True,

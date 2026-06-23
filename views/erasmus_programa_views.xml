@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_erasmus_programa_tree" model="ir.ui.view">
+        <field name="name">erasmus.programa.tree</field>
+        <field name="model">erasmus.programa</field>
+        <field name="arch" type="xml">
+            <tree string="Programas Erasmus">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_erasmus_programa_form" model="ir.ui.view">
+        <field name="name">erasmus.programa.form</field>
+        <field name="model">erasmus.programa</field>
+        <field name="arch" type="xml">
+            <form string="Programa Erasmus">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_erasmus_programa" model="ir.actions.act_window">
+        <field name="name">Programas Erasmus</field>
+        <field name="res_model">erasmus.programa</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

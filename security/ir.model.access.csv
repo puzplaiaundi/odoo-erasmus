@@ -9,3 +9,6 @@ access_erasmus_familia_profesional_admin,erasmus.familia.profesional.admin,model
 access_erasmus_familia_profesional_read,erasmus.familia.profesional.read,model_erasmus_familia_profesional,gestion_erasmus.group_erasmus_user,1,0,0,0
 acces_erasmus_nivel_idioma_admin,erasmus.nivel.idioma.admin,model_erasmus_nivel_idioma,gestion_erasmus.group_erasmus_admin,1,1,1,1
 access_erasmus_nivel_idioma_user,erasmus.nivel.idioma.user,model_erasmus_nivel_idioma,gestion_erasmus.group_erasmus_user,1,0,0,0
+access_erasmus_programa_admin,erasmus.programa.admin,model_erasmus_programa,gestion_erasmus.group_erasmus_admin,1,1,1,1
+access_erasmus_tipo_movilidad_admin,erasmus.tipo.movilidad.admin,model_erasmus_tipo_movilidad,gestion_erasmus.group_erasmus_admin,1,1,1,1
+access_erasmus_tipo_movilidad_user,erasmus.tipo.movilidad.user,model_erasmus_tipo_movilidad,gestion_erasmus.group_erasmus_user,1,0,0,0

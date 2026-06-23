@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_erasmus_tipo_movilidad_tree" model="ir.ui.view">
+        <field name="name">erasmus.tipo.movilidad.tree</field>
+        <field name="model">erasmus.tipo.movilidad</field>
+        <field name="arch" type="xml">
+            <tree string="Tipos de movilidad Erasmus">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="tipo_contacto_ids" widget="many2many_tags"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_erasmus_tipo_movilidad_form" model="ir.ui.view">
+        <field name="name">erasmus.tipo.movilidad.form</field>
+        <field name="model">erasmus.tipo.movilidad</field>
+        <field name="arch" type="xml">
+            <form string="Tipo de movilidad Erasmus">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="tipo_contacto_ids" widget="many2many_tags"
+                            context="{'form_view_ref': 'gestion_erasmus.view_erasmus_tipo_contacto_form'}"
+                        />
+                        <field name="sequence"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_erasmus_tipo_movilidad" model="ir.actions.act_window">
+        <field name="name">Tipos de movilidad</field>
+        <field name="res_model">erasmus.tipo.movilidad</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

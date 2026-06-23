@@ -74,5 +74,20 @@
         groups="gestion_erasmus.group_erasmus_admin"
         sequence="50"
     />
-
+     <menuitem
+        id="menu_erasmus_programa"
+        name="Programas Erasmus"
+        parent="menu_erasmus_configuracion"
+        action="action_erasmus_programa"
+        groups="gestion_erasmus.group_erasmus_admin"
+        sequence="60"
+    />
+    <menuitem
+        id="menu_erasmus_tipo_movilidad"
+        name="Tipos de movilidad"
+        parent="menu_erasmus_configuracion"
+        action="action_erasmus_tipo_movilidad"
+        groups="gestion_erasmus.group_erasmus_admin"
+        sequence="70"
+    />
 </odoo>

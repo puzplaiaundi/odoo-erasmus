@@ -31,6 +31,8 @@
             </xpath>
             <xpath expr="//field[@name='name']" position="before">
                    <group>
+                       <field name="tipo_contacto_erasmus_id"/>
+                       <field name="tipo_movilidad_erasmus_id" domain="[('tipo_contacto_ids', 'in', tipo_contacto_erasmus_id)]"/>
                            <field name="erasmus_nombre" class="ge-erasmus-input"/>
                            <field name="erasmus_apellido1" class="ge-erasmus-input"/>
                            <field name="erasmus_apellido2" class="ge-erasmus-input"/>
@@ -45,13 +47,14 @@
                     <group>
                         <group>
                             <field name="es_erasmus"/>
-                            <field name="familia_profesional_erasmus_id"
-                                context="{'form_view_ref': 'gestion_erasmus.view_erasmus_familia_profesional_form'}"
-                            />
-                            <field name="nivel_formacion_erasmus_disponible_ids" invisible="1"/>
+                            <field name="familia_profesional_erasmus_disponible_ids" invisible="1"/>
                             <field name="nivel_formacion_erasmus_id"
-                                domain="[('id', 'in', nivel_formacion_erasmus_disponible_ids)]"
                                 context="{'form_view_ref': 'gestion_erasmus.view_erasmus_nivel_formacion_form'}"
+                            />
+                            <field name="programa_erasmus_id"/>
+                            <field name="familia_profesional_erasmus_id"
+                                domain="[('id', 'in', familia_profesional_erasmus_disponible_ids)]"
+                                context="{'form_view_ref': 'gestion_erasmus.view_erasmus_familia_profesional_form'}"
                             />
                             <field name="ciclo_formativo_erasmus_id"
                                 domain="[('nivel_formacion_id', '=', nivel_formacion_erasmus_id), ('familia_profesional_id', '=', familia_profesional_erasmus_id)]"
