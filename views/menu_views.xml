@@ -24,6 +24,14 @@
         groups="gestion_erasmus.group_erasmus_user"
         sequence="10"
     />
+    <menuitem
+        id="menu_erasmus_movilidad"
+        name="Movilidades"
+        parent="menu_erasmus_root"
+        action="action_erasmus_movilidad"
+        groups="gestion_erasmus.group_erasmus_user"
+        sequence="20"
+    />
 
     <menuitem
         id="menu_erasmus_configuracion"

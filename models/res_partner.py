@@ -28,6 +28,12 @@ class ResPartner(models.Model):
         domain="[('tipo_contacto_ids', 'in', tipo_contacto_erasmus_id)]",
     )
 
+    movilidad_ids = fields.One2many(
+        comodel_name='erasmus.movilidad',
+        inverse_name='partner_id',
+        string='Movilidades',
+    )
+
     familia_profesional_erasmus_id = fields.Many2one(
         comodel_name='erasmus.familia.profesional',
         string='Familia profesional',

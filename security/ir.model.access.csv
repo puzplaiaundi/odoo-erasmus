@@ -12,3 +12,5 @@ access_erasmus_nivel_idioma_user,erasmus.nivel.idioma.user,model_erasmus_nivel_i
 access_erasmus_programa_admin,erasmus.programa.admin,model_erasmus_programa,gestion_erasmus.group_erasmus_admin,1,1,1,1
 access_erasmus_tipo_movilidad_admin,erasmus.tipo.movilidad.admin,model_erasmus_tipo_movilidad,gestion_erasmus.group_erasmus_admin,1,1,1,1
 access_erasmus_tipo_movilidad_user,erasmus.tipo.movilidad.user,model_erasmus_tipo_movilidad,gestion_erasmus.group_erasmus_user,1,0,0,0
+access_erasmus_movilidad_admin,erasmus.movilidad.admin,model_erasmus_movilidad,gestion_erasmus.group_erasmus_admin,1,1,1,1
+access_erasmus_movilidad_user,erasmus.movilidad.user,model_erasmus_movilidad,gestion_erasmus.group_erasmus_user,1,1,1,0

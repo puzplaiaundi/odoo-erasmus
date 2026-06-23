@@ -5,6 +5,7 @@ from . import erasmus_nivel_formacion
 from . import erasmus_ciclo_formativo
 from . import erasmus_familia_profesional
 from . import erasmus_nivel_idioma
+from . import erasmus_movilidad
 from . import res_partner
 from . import erasmus_programa
 

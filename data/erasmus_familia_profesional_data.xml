@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="erasmus_familia_profesional_informatica" model="erasmus.familia.profesional">
+        <field name="name">Informática</field>
+        <field name="sequence">10</field>
+        <field name="active">1</field>
+    </record>
+       <record id="erasmus_familia_profesional_administracion" model="erasmus.familia.profesional">
+        <field name="name">Administración</field>
+        <field name="sequence">20</field>
+        <field name="active">1</field>
+    </record>
+
+
+
+</odoo>

@@ -85,6 +85,35 @@
                         <field name="erasmus_familia_numerosa"/>
                         <field name="erasmus_discapacitado"/>
                     </group>
+                    <group string="Movilidades">
+                        <field name="movilidad_ids" context="{'default_partner_id': id, 'form_view_ref': 'gestion_erasmus.view_erasmus_movilidad_form'}">
+                            <tree>
+                                <field name="name"/>
+                                <field name="tipo_contacto_erasmus_id" invisible="1"/>
+                                <field name="tipo_movilidad_id"/>
+                                <field name="date_start"/>
+                                <field name="date_end"/>
+                                <field name="country_id"/>
+                                <field name="state"/>
+                            </tree>
+                            <form string="Movilidad Erasmus">
+                                <group>
+                                    <field name="name"/>
+                                    <field name="partner_id"/>
+                                    <field name="tipo_contacto_erasmus_id" readonly="1"/>
+                                    <field name="tipo_movilidad_id"/>
+                                    <field name="state"/>
+                                </group>
+                                <group>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                    <field name="country_id"/>
+                                    <field name="city"/>
+                                    <field name="organization_contact_id"/>
+                                </group>
+                            </form>
+                        </field>
+                    </group>
                 </page>
                 
             </xpath>

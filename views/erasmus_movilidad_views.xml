@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_erasmus_movilidad_tree" model="ir.ui.view">
+        <field name="name">erasmus.movilidad.tree</field>
+        <field name="model">erasmus.movilidad</field>
+        <field name="arch" type="xml">
+            <tree string="Movilidades Erasmus">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="tipo_contacto_erasmus_id"/>
+                <field name="tipo_movilidad_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="country_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_erasmus_movilidad_form" model="ir.ui.view">
+        <field name="name">erasmus.movilidad.form</field>
+        <field name="model">erasmus.movilidad</field>
+        <field name="arch" type="xml">
+            <form string="Movilidad Erasmus">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="tipo_contacto_erasmus_id" readonly="1"/>
+                            <field name="tipo_contacto_code" invisible="1"/>
+                            <field name="tipo_movilidad_id" domain="[('tipo_contacto_ids', 'in', tipo_contacto_erasmus_id)]"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="academic_year"/>
+                            <field name="extra_information"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="country_preference_1_id"/>
+                            <field name="country_preference_2_id"/>
+                            <field name="country_preference_3_id"/>
+                            <field name="recent_graduate"/>
+                            <field name="country_id"/>
+                            <field name="city"/>
+                            <field name="organization_contact_id"/>
+                        </group>
+                    </group>
+
+                    <group string="Documentos">
+                        <group>
+                            <field name="dni_image_a" filename="dni_image_a_filename"/>
+                            <field name="dni_image_b" filename="dni_image_b_filename"/>
+                        </group>
+                        <group>
+                            <field name="deposit_payment_proof" filename="deposit_payment_proof_filename"
+                                invisible="tipo_contacto_code not in ['estudiante', 'alumno']"
+                            />
+                            <field name="eu_scholarship_payment_proof" filename="eu_scholarship_payment_proof_filename"
+                                invisible="tipo_contacto_code not in ['estudiante', 'alumno', 'profesor', 'docente']"
+                            />
+                            <field name="gv_scholarship_payment_proof" filename="gv_scholarship_payment_proof_filename"
+                                invisible="tipo_contacto_code not in ['estudiante', 'alumno']"
+                            />
+                        </group>
+                    </group>
+
+                    <group string="Datos extraidos del contacto">
+                        <group>
+                            <field name="partner_name" readonly="1"/>
+                            <field name="partner_email" readonly="1"/>
+                            <field name="partner_phone" readonly="1"/>
+                            <field name="partner_mobile" readonly="1"/>
+                            <field name="partner_vat" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Campos de estudiante"
+                        invisible="tipo_contacto_code not in ['estudiante', 'alumno']">
+                        <group>
+                            <field name="centro_estudios_destino"/>
+                            <field name="tutor_empresa"/>
+                            <field name="beca_ue"/>
+                            <field name="student_less_opportunity"/>
+                            <field name="less_opportunity_reason"/>
+                            <field name="student_large_family"/>
+                            <field name="student_erasmus_type"/>
+                            <field name="cv_english" filename="cv_english_filename"/>
+                            <field name="cover_letter" filename="cover_letter_filename"/>
+                        </group>
+                    </group>
+
+                    <group string="Campos de profesor"
+                        invisible="tipo_contacto_code not in ['profesor', 'docente']">
+                        <group>
+                            <field name="asignatura_docencia"/>
+                            <field name="horas_docencia"/>
+                            <field name="plan_formacion"/>
+                        </group>
+                    </group>
+
+                    <group string="Campos de acompaniante"
+                        invisible="tipo_contacto_code not in ['acompaniante']">
+                        <group>
+                            <field name="grupo_acompanado"/>
+                            <field name="numero_participantes"/>
+                            <field name="responsable_logistica"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_erasmus_movilidad" model="ir.actions.act_window">
+        <field name="name">Movilidades Erasmus</field>
+        <field name="res_model">erasmus.movilidad</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>
